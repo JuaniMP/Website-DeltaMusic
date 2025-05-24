@@ -1,0 +1,11 @@
+<h1>Bienvenido {{ user?.nombres }} {{ user?.apellidos }}</h1>
+
+<div *ngIf="role === 'admin'; else userView">
+  <h2>Panel de administración</h2>
+  <p>Gestión de usuarios, reportes, estadísticas, etc.</p>
+</div>
+
+<ng-template #userView>
+  <h2>Panel de usuario</h2>
+  <p>Accede a tu perfil, historial y configuraciones.</p>
+</ng-template>

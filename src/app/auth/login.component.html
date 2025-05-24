@@ -1,0 +1,11 @@
+<form [formGroup]="form" (ngSubmit)="submit()">
+  <h2>Iniciar sesión</h2>
+
+  <div *ngIf="errorMessage" class="error-message">
+    {{ errorMessage }}
+  </div>
+
+  <input formControlName="correo" placeholder="Usuario" />
+  <input formControlName="clave" type="password" placeholder="Clave" />
+  <button type="submit">Iniciar sesión</button>
+</form>

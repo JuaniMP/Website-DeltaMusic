@@ -1,0 +1,16 @@
+h1 {
+    text-align: center;
+    margin-top: 2rem;
+    color: #333;
+}
+
+h2 {
+    text-align: center;
+    color: #555;
+    margin-top: 1rem;
+}
+
+p {
+    text-align: center;
+    color: #666;
+}

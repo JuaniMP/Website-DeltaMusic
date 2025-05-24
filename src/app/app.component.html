@@ -1,0 +1,9 @@
+<header>
+  <h1>{{ title }}</h1>
+</header>
+
+<div class="logout-container" *ngIf="auth.isAuthenticated()">
+  <button (click)="logout()">Cerrar sesión</button>
+</div>
+
+<router-outlet></router-outlet>
