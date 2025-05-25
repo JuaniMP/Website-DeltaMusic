@@ -1,0 +1,48 @@
+<div class="login-container">
+  <form [formGroup]="form" (ngSubmit)="submit()" class="login-card">
+
+    <!-- Logo -->
+    <img src="/assets/images/logo.png" alt="Logo" class="login-logo" />
+
+    <!-- Título -->
+    <div class="register-title">{{ '{' }} REGÍSTRATE EN DELTAMUSIC {{ '}' }}</div>
+
+    <!-- Nombre -->
+    <div class="field">
+      <label>Nombre</label>
+      <input
+        formControlName="nombre"
+        placeholder="INGRESA TU NOMBRE"
+        class="field-input"
+      />
+    </div>
+
+    <!-- Apellidos -->
+    <div class="field">
+      <label>Apellido(s)</label>
+      <input
+        formControlName="apellidos"
+        placeholder="INGRESA TU(S) APELLIDO(S)"
+        class="field-input"
+      />
+    </div>
+
+    <!-- Correo electrónico -->
+    <div class="field">
+      <label>Correo electrónico</label>
+      <input
+        formControlName="correo"
+        placeholder="INGRESA TU EMAIL"
+        class="field-input"
+      />
+    </div>
+
+    <!-- Botón Registrar -->
+    <button type="submit" class="accept-btn">REGISTRARSE</button>
+
+    <!-- Enlace al login -->
+    <div class="links">
+      <a routerLink="/login">¿YA TIENES CUENTA? INICIA SESIÓN</a>
+    </div>
+  </form>
+</div>

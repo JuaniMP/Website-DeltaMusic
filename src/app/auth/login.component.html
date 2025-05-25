@@ -1,11 +1,37 @@
-<form [formGroup]="form" (ngSubmit)="submit()">
-  <h2>Iniciar sesión</h2>
+<div class="login-container">
+  <form [formGroup]="form" (ngSubmit)="submit()" class="login-card">
 
-  <div *ngIf="errorMessage" class="error-message">
-    {{ errorMessage }}
-  </div>
+    <!-- Logo arriba -->
+    <img src="/assets/images/logo.png" alt="Logo" class="login-logo" />
 
-  <input formControlName="correo" placeholder="Usuario" />
-  <input formControlName="clave" type="password" placeholder="Clave" />
-  <button type="submit">Iniciar sesión</button>
-</form>
+    <!-- Campo Email -->
+    <div class="field">
+      <input
+        formControlName="correo"
+        placeholder="INGRESA TU EMAIL"
+        class="field-input"
+      />
+    </div>
+
+    <!-- Campo Contraseña con botón de ojo -->
+    <div class="field password-wrapper">
+      <input
+        [type]="passwordFieldType"
+        formControlName="clave"
+        placeholder="INGRESA TU CONTRASEÑA"
+        class="field-input"
+      />
+      <button type="button" class="toggle-pwd" (click)="togglePassword()">👁️</button>
+    </div>
+
+    <!-- Botón Aceptar -->
+    <button type="submit" class="accept-btn">ACEPTAR</button>
+
+    <!-- Enlaces inferiores -->
+    <div class="links">
+      <a routerLink="/forgot">¿HAS OLVIDADO TU CONTRASEÑA?</a>
+      <a routerLink="/register">¿NO TIENES CUENTA? REGÍSTRATE EN DELTAMUSIC</a>
+    </div>
+
+  </form>
+</div>
