@@ -1,11 +1,115 @@
-<h1>Bienvenido {{ user?.nombres }} {{ user?.apellidos }}</h1>
+<div class="vinilo-page">
 
-<div *ngIf="role === 'admin'; else userView">
-  <h2>Panel de administración</h2>
-  <p>Gestión de usuarios, reportes, estadísticas, etc.</p>
+  <!-- HEADER con logo + texto y nav icons -->
+  <header class="vinilo-header">
+    <div class="logo-area">
+      <img src="/assets/images/logo.png" alt="Deltamusic" class="logo" />
+      <span class="logo-text">Deltamusic</span>
+    </div>
+    <nav class="top-nav">
+      <button
+        class="icon-btn"
+        (click)="switchView('vinilo')"
+        [class.active]="view === 'vinilo'"
+      >
+        <img src="/assets/images/vinilo-icon.png" alt="Vinilo" />
+      </button>
+      <button
+        class="icon-btn"
+        (click)="switchView('cd')"
+        [class.active]="view === 'cd'"
+      >
+        <img src="/assets/images/cd-icon.png" alt="CD" />
+      </button>
+      <button class="icon-btn">
+        <img src="/assets/images/user-icon.png" alt="Cliente" />
+      </button>
+      <button class="icon-btn">
+        <img src="/assets/images/cart-icon.png" alt="Carrito" />
+      </button>
+    </nav>
+  </header>
+
+  <!-- Toggle Vinilo/CD -->
+  <div class="usuario-header">
+    <a
+      href="#"
+      class="toggle-button"
+      [class.active]="view === 'vinilo'"
+      (click)="switchView('vinilo'); $event.preventDefault()"
+    >
+      Vinilo
+    </a>
+    <a
+      href="#"
+      class="toggle-button"
+      [class.active]="view === 'cd'"
+      (click)="switchView('cd'); $event.preventDefault()"
+    >
+      CD
+    </a>
+  </div>
+
+  <!-- FILTROS -->
+  <section class="filters">
+    <select>
+      <option>Géneros</option>
+      <option>Rock</option>
+      <option>Pop</option>
+      <option>Jazz</option>
+    </select>
+    <select>
+      <option>Artista</option>
+      <option>The Beatles</option>
+      <option>Michael Jackson</option>
+    </select>
+    <select>
+      <option>Año</option>
+      <option>1970s</option>
+      <option>1980s</option>
+      <option>1990s</option>
+    </select>
+    <button class="search-btn">
+      <img src="/assets/images/search-icon.png" alt="Buscar" />
+    </button>
+  </section>
+
+  <!-- Carrusel: Los Más Vendidos -->
+  <section class="carousel-section">
+    <h2>Los Más Vendidos</h2>
+    <div class="carousel">
+      <button class="nav-arrow left">&laquo;</button>
+      <div class="track">
+        <div class="card" *ngFor="let a of mostSold; trackBy: trackByIndex">
+          <img [src]="a.imageUrl" [alt]="a.title" />
+          <div class="info">
+            <div class="album-title">{{ a.title }}</div>
+            <div class="album-artist">{{ a.artist }}</div>
+            <div class="price">{{ a.price }}</div>
+          </div>
+        </div>
+      </div>
+      <button class="nav-arrow right">&raquo;</button>
+    </div>
+  </section>
+
+  <!-- Carrusel: Por Género -->
+  <section class="carousel-section">
+    <h2>Los Más Vendidos por Género</h2>
+    <div class="carousel">
+      <button class="nav-arrow left">&laquo;</button>
+      <div class="track">
+        <div class="card" *ngFor="let a of byGenre; trackBy: trackByIndex">
+          <img [src]="a.imageUrl" [alt]="a.title" />
+          <div class="info">
+            <div class="album-title">{{ a.title }}</div>
+            <div class="album-artist">{{ a.artist }}</div>
+            <div class="price">{{ a.price }}</div>
+          </div>
+        </div>
+      </div>
+      <button class="nav-arrow right">&raquo;</button>
+    </div>
+  </section>
+
 </div>
-
-<ng-template #userView>
-  <h2>Panel de usuario</h2>
-  <p>Accede a tu perfil, historial y configuraciones.</p>
-</ng-template>
