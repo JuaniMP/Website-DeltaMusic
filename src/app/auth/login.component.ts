@@ -12,6 +12,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 export class LoginComponent {
   form: FormGroup;
   errorMessage: string | null = null;
+  passwordFieldType: 'password' | 'text' = 'password'; // para el ojo
 
   constructor(
     private fb: FormBuilder,
@@ -26,14 +27,12 @@ export class LoginComponent {
 
   submit() {
     this.errorMessage = null;
-  
     this.auth.login(this.form.value).subscribe({
       next: () => {
         this.router.navigate(['/usuario']);
       },
       error: (err) => {
         const error = err.error;
-  
         if (typeof error === 'string') {
           this.errorMessage = error;
         } else if (typeof error === 'object' && error !== null) {
@@ -44,6 +43,9 @@ export class LoginComponent {
       }
     });
   }
-  
-  
+
+  togglePassword() {
+    this.passwordFieldType =
+      this.passwordFieldType === 'password' ? 'text' : 'password';
+  }
 }

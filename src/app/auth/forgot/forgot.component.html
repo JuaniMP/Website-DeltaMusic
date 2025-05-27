@@ -1,0 +1,41 @@
+<div class="login-container">
+  <form [formGroup]="form" (ngSubmit)="submit()" class="login-card">
+    <div class="register-title">
+      ¿Olvidaste tu contraseña?<br>
+      ¡No hay problema!
+    </div>
+
+    <p class="info">
+      ¿Cuál es tu correo electrónico?<br>
+      Al darle ACEPTAR te enviaremos a tu correo una nueva contraseña temporal
+      para que luego puedas modificarla desde tu perfil.
+    </p>
+
+    <div class="field">
+      <input
+        type="email"
+        formControlName="correoUsuario"
+        placeholder="INGRESA EL EMAIL DE TU CUENTA"
+        class="field-input"
+      />
+      <small class="error" *ngIf="f['correoUsuario'].touched && f['correoUsuario'].hasError('required')">
+        El correo es obligatorio.
+      </small>
+      <small class="error" *ngIf="f['correoUsuario'].touched && f['correoUsuario'].hasError('email')">
+        Ingresa un correo válido.
+      </small>
+    </div>
+
+    <button type="submit" class="accept-btn" [disabled]="form.invalid || submitting">
+      ACEPTAR
+    </button>
+
+    <div class="message" [class.error]="isError" *ngIf="message">
+      {{ message }}
+    </div>
+
+    <div class="links">
+      <a routerLink="/login">← Volver al inicio de sesión</a>
+    </div>
+  </form>
+</div>
