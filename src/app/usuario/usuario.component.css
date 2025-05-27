@@ -1,16 +1,237 @@
-h1 {
-    text-align: center;
-    margin-top: 2rem;
-    color: #333;
+:root {
+  --gray-dark:     #993d08;
+  --gray-light:    #B0B0B0;
+  --burnt-orange:  #D2691E;
+  --brown-dark:    #4B2E2E;
+  --white-neon:    #ffffff;
 }
 
-h2 {
-    text-align: center;
-    color: #555;
-    margin-top: 1rem;
+/* CONTENEDOR PRINCIPAL */
+.vinilo-page {
+  position: relative;
+  min-height: 100vh;
+  font-family: 'Cinzel', serif;
+  color: var(--gray-light);
+  overflow-x: hidden;
+
+  /* Fondo fijo + aclarado, sin desenfoque */
+  background: url('/assets/images/background1.png') center/cover no-repeat fixed;
+  filter: brightness(1.2);
 }
 
-p {
+/* Capa semitransparente suave */
+.vinilo-page::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(46, 46, 46, 0.3);
+  z-index: 0;
+}
+
+/* Eleva el contenido real por encima */
+.vinilo-page > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* HEADER: logo + texto + navbar */
+.vinilo-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+}
+.logo-area {
+  display: flex;
+  align-items: center;
+}
+.logo {
+  height: 60px;
+}
+.logo-text {
+  margin-left: 0.75rem;
+  font-size: 2rem;
+  color: var(--white-neon);
+  text-shadow: 0 0 8px rgba(255,255,255,0.8);
+}
+
+/* ICONOS */
+.top-nav {
+  display: flex;
+  align-items: center;
+}
+.icon-btn {
+  background: transparent;
+  border: none;
+  margin-left: 1rem;
+  cursor: pointer;
+  opacity: 0.8;
+  transition: opacity .2s, transform .2s;
+}
+.icon-btn img {
+  height: 40px;
+  width: auto;
+}
+.icon-btn.active,
+.icon-btn:hover {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+/* TOGGLE Vinilo/CD */
+.usuario-header {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  padding: 0.5rem 2rem;
+}
+.toggle-button {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  background: rgba(255, 255, 255, 0.6);
+  color: var(--white-neon);
+  border: 1px solid var(--burnt-orange);
+  border-radius: 4px;
+  text-decoration: none;
+  transition: background .2s;
+}
+.toggle-button.active,
+.toggle-button:hover {
+  background: rgba(210,105,30,0.3);
+}
+
+/* FILTROS */
+
+.filters {
+  display: flex;
+  justify-content: flex-start; /* Mueve los filtros hacia la izquierda */
+  gap: 1.5rem; /* Mantén el espacio entre los filtros */
+  margin: 2rem; /* Ajusta el margen general */
+  padding-left: 1rem; /* Agrega un poco de espacio desde el borde izquierdo */
+}
+
+.filters select {
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid var(--brown-dark);
+  color: var(--white-neon);
+  padding: 0.5rem 1rem; /* Reduce el relleno interno */
+  font-size: 1rem; /* Reduce el tamaño de la fuente */
+  border-radius: 6px; /* Mantén el radio de los bordes */
+  text-shadow: 0 0 4px rgba(0, 0, 0, 0.6); /* Cambia la sombra a un blanco más claro */
+}
+
+.search-btn {
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid var(--burnt-orange);
+  padding: 0.5rem 1rem; /* Mantén el relleno interno */
+  font-size: 1rem; /* Mantén el tamaño de la fuente */
+  border-radius: 6px; /* Mantén el radio de los bordes */
+  cursor: pointer;
+  text-shadow: 0 0 4px rgba(255, 255, 255, 0.6); /* Cambia la sombra a un blanco más claro */
+  margin-left: auto; /* Mueve el botón a la esquina derecha */
+}
+
+.search-btn img {
+  height: 20px; /* Reduce el tamaño del ícono */
+}
+
+/* TÍTULOS DE CARRUSEL: blanco con brillo */
+.carousel-section h2 {
+  font-size: 1.5rem;
+  margin: 2rem 2rem 1rem;
+  color:  rgba(255, 251, 251, 0.6);
+  text-shadow: 0 0 6px rgba(255,255,255,0.8);
+}
+
+/* CARRUSEL */
+.carousel {
+    display: flex;
+    align-items: center;
+    padding: 1rem 2rem;
+}
+
+/* Aumenta el tamaño de las tarjetas del carrusel */
+.card {
+    min-width: 220px;
+    max-width: 220px;
+    background: rgba(46,46,46,0.6);
+    border: 1px solid rgba(210,105,30,0.4);
+    border-radius: 8px;
+    scroll-snap-align: start;
+    cursor: pointer;
+    transition: transform .2s;
+}
+.card:hover {
+    transform: scale(1.1);
+}
+.card img {
+    width: 190px;
+    margin: 0.5rem auto 0;
+    display: block;
+}
+.info {
+    padding: 0.5rem;
     text-align: center;
-    color: #666;
+}
+.album-title {
+    font-size: 1.25rem;
+    color:  rgba(255, 251, 251, 0.6);
+    margin-bottom: 0.25rem;
+    text-shadow: 0 0 4px var(--neon-orange);
+}
+.album-artist {
+    font-size: 1rem;
+    color:  rgba(255, 251, 251, 0.6);
+    margin-bottom: 0.5rem;
+    text-shadow: 0 0 2px var(--neon-orange);
+}
+.price {
+    font-size: 1rem;
+    color:  rgba(255, 251, 251, 0.6);
+}
+
+.nav-arrow {
+    background: transparent;
+    border: 1px solid var(--burnt-orange);
+    color: var(--burnt-orange);
+    font-size: 1.5rem;
+    width: 2.5rem; height: 2.5rem;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; border-radius: 50%;
+    opacity: 0.7;
+    transition: opacity .2s;
+}
+.nav-arrow:hover {
+    opacity: 1;
+}
+.track {
+    display: flex;
+    overflow-x: auto;
+    gap: 1rem;
+    scroll-snap-type: x mandatory;
+    flex: 1;
+    padding: 0.5rem 0;
+}
+.track::-webkit-scrollbar {
+    height: 8px;
+}
+.track::-webkit-scrollbar-thumb {
+    background: rgba(89,89,89,0.6);
+    border-radius: 4px;
+}
+
+/* MÓVIL */
+@media (max-width: 768px) {
+  .vinilo-header,
+  .usuario-header,
+  .filters {
+    flex-direction: column;
+    align-items: center;
+  }
+  .filters {
+    gap: 0.5rem;
+  }
+  .carousel {
+    padding: 1rem;
+  }
 }
