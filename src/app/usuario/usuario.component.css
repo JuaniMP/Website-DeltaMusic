@@ -15,7 +15,7 @@
   overflow-x: hidden;
 
   /* Fondo fijo + aclarado, sin desenfoque */
-  background: url('/assets/images/background1.png') center/cover no-repeat fixed;
+  background: url('/assets/images/background1.jpg') center/cover no-repeat fixed;
   filter: brightness(1.2);
 }
 
