@@ -9,8 +9,9 @@ import { NotFoundComponent }   from './common/not-found.component';
 import { HttpClientModule }    from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
 
-// Importa el componente standalone
+// Importa los componentes standalone
 import { RegisterComponent }   from './auth/register/register.component';
+import { ForgotComponent }     from './auth/forgot/forgot.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { RegisterComponent }   from './auth/register/register.component';
     AppRoutingModule,
     HttpClientModule,
     ReactiveFormsModule,
-    RegisterComponent // Importa el componente standalone aquí
+    RegisterComponent, // Importa el componente standalone aquí
+    ForgotComponent    // Importa el componente standalone aquí
   ],
   providers: [],
   bootstrap: [AppComponent]

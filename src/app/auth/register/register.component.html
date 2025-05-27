@@ -1,47 +1,60 @@
 <div class="login-container">
+
+  <!-- TOAST -->
+  <div class="toast" *ngIf="showToast" [ngClass]="toastType">
+    <span class="icon">{{ toastType === 'success' ? '✅' : '❗' }}</span>
+    <span class="message">{{ toastMessage }}</span>
+  </div>
+
   <form [formGroup]="form" (ngSubmit)="submit()" class="login-card">
-
-    <!-- Logo -->
     <img src="/assets/images/logo.png" alt="Logo" class="login-logo" />
-
-    <!-- Título -->
-    <div class="register-title">{{ '{' }} REGÍSTRATE EN DELTAMUSIC {{ '}' }}</div>
+    <div class="register-title">REGÍSTRATE EN DELTAMUSIC</div>
 
     <!-- Nombre -->
     <div class="field">
-      <label>Nombre</label>
-      <input
-        formControlName="nombre"
-        placeholder="INGRESA TU NOMBRE"
-        class="field-input"
-      />
+      <label for="nombre">Nombre</label>
+      <input id="nombre" type="text" formControlName="nombre" placeholder="INGRESA TU NOMBRE" class="field-input" />
+      <small class="error" *ngIf="f['nombre'].touched && f['nombre'].hasError('required')">
+        El nombre es obligatorio.
+      </small>
+      <small class="error" *ngIf="f['nombre'].touched && f['nombre'].hasError('minlength')">
+        Mínimo 2 caracteres.
+      </small>
     </div>
 
     <!-- Apellidos -->
     <div class="field">
-      <label>Apellido(s)</label>
-      <input
-        formControlName="apellidos"
-        placeholder="INGRESA TU(S) APELLIDO(S)"
-        class="field-input"
-      />
+      <label for="apellidos">Apellido(s)</label>
+      <input id="apellidos" type="text" formControlName="apellidos" placeholder="INGRESA TUS APELLIDOS" class="field-input" />
+      <small class="error" *ngIf="f['apellidos'].touched && f['apellidos'].hasError('required')">
+        Los apellidos son obligatorios.
+      </small>
+      <small class="error" *ngIf="f['apellidos'].touched && f['apellidos'].hasError('minlength')">
+        Mínimo 2 caracteres.
+      </small>
     </div>
 
     <!-- Correo electrónico -->
     <div class="field">
-      <label>Correo electrónico</label>
-      <input
-        formControlName="correo"
-        placeholder="INGRESA TU EMAIL"
-        class="field-input"
-      />
+      <label for="correoUsuario">Correo electrónico</label>
+      <input id="correoUsuario" type="email" formControlName="correoUsuario" placeholder="INGRESA TU EMAIL" class="field-input" />
+      <small class="error" *ngIf="f['correoUsuario'].touched && f['correoUsuario'].hasError('required')">
+        El correo es obligatorio.
+      </small>
+      <small class="error" *ngIf="f['correoUsuario'].touched && f['correoUsuario'].hasError('email')">
+        Ingresa un correo válido.
+      </small>
+      <small class="error" *ngIf="f['correoUsuario'].touched && f['correoUsuario'].hasError('emailTaken')">
+        Este correo ya está registrado.
+      </small>
     </div>
 
-    <!-- Botón Registrar -->
-    <button type="submit" class="accept-btn">REGISTRARSE</button>
+    <button type="submit" class="accept-btn" [disabled]="form.invalid">
+      REGISTRARSE
+    </button>
 
-    <!-- Enlace al login -->
     <div class="links">
+      <!-- Ahora esto funcionará -->
       <a routerLink="/login">¿YA TIENES CUENTA? INICIA SESIÓN</a>
     </div>
   </form>
