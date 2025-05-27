@@ -1,14 +1,17 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { NgModule }       from '@angular/core';
+import { CommonModule }   from '@angular/common';
+import { RouterModule }   from '@angular/router';
 import { UsuarioComponent } from './usuario.component';
-import { RouterModule, Routes } from '@angular/router';
 
-const routes: Routes = [
-  { path: '', component: UsuarioComponent },
+const routes = [
+  { path: '', component: UsuarioComponent }
 ];
 
 @NgModule({
-  declarations: [UsuarioComponent],
-  imports: [CommonModule, RouterModule.forChild(routes)],
+  imports: [
+    CommonModule,
+    UsuarioComponent,      // componente standalone
+    RouterModule.forChild(routes)
+  ]
 })
 export class UsuarioModule {}
