@@ -1,20 +1,27 @@
 {
-  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "ng serve",
-      "type": "chrome",
+      "name": "ng serve in Edge",
+      "type": "pwa-msedge",
       "request": "launch",
       "preLaunchTask": "npm: start",
-      "url": "http://localhost:4200/"
+      "url": "http://localhost:4200/",
+      "runtimeExecutable": "stable",
+      "runtimeArgs": [
+        "--user-data-dir=${workspaceFolder}/.vscode/edge-user-data",
+        "--remote-debugging-port=9223"
+      ],
+      "webRoot": "${workspaceFolder}/src"
     },
     {
-      "name": "ng test",
-      "type": "chrome",
+      "name": "ng test in Edge",
+      "type": "pwa-msedge",
       "request": "launch",
       "preLaunchTask": "npm: test",
-      "url": "http://localhost:9876/debug.html"
+      "url": "http://localhost:9876/debug.html",
+      "runtimeExecutable": "stable",
+      "webRoot": "${workspaceFolder}/src"
     }
   ]
 }
