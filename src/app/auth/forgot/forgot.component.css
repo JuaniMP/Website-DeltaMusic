@@ -4,6 +4,23 @@
   background: url('/assets/images/background.png') no-repeat center center fixed;
   background-size: cover;
 }
+.toast {
+  font-family: 'Arial', sans-serif;
+  font-size: 0.9rem;
+  border-radius: 8px !important;
+  padding: 14px !important;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.4) !important;
+  color: #fff;
+}
+
+.toast-success {
+  background-color: #27ae60 !important;
+}
+
+.toast-error {
+  background-color: #e74c3c !important;
+}
+
 
 .login-container {
   display: flex;

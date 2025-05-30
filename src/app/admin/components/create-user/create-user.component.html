@@ -1,0 +1,57 @@
+<!-- src/app/admin/components/create-user/create-user.component.html -->
+<div class="form-card">
+  <h2>{{ isEdit ? 'Editar usuario' : 'Crear nuevo usuario' }}</h2>
+  <form [formGroup]="form" (ngSubmit)="submit()">
+    <div class="field">
+      <input formControlName="nombre" placeholder="Nombre" />
+      <small *ngIf="form.get('nombre')?.touched && form.get('nombre')?.invalid">
+        Nombre obligatorio.
+      </small>
+    </div>
+
+    <div class="field">
+      <input formControlName="apellidos" placeholder="Apellidos" />
+      <small *ngIf="form.get('apellidos')?.touched && form.get('apellidos')?.invalid">
+        Apellidos obligatorios.
+      </small>
+    </div>
+
+    <div class="field">
+      <input formControlName="correoUsuario" placeholder="Correo electrónico" />
+      <small *ngIf="form.get('correoUsuario')?.hasError('required')">
+        Correo obligatorio.
+      </small>
+      <small *ngIf="form.get('correoUsuario')?.hasError('email')">
+        Formato inválido.
+      </small>
+    </div>
+
+    <div class="field">
+      <input formControlName="loginUsrio" placeholder="Login" />
+      <small *ngIf="form.get('loginUsrio')?.touched && form.get('loginUsrio')?.invalid">
+        Login obligatorio.
+      </small>
+    </div>
+
+    <div class="field">
+      <label>Rol:</label>
+      <select formControlName="idTipoUsuario">
+        <option value="A">Administrador</option>
+        <option value="U">Usuario</option>
+      </select>
+    </div>
+
+    <div class="field switch">
+      <label>
+        <input type="checkbox" formControlName="estado" /> Activo
+      </label>
+    </div>
+
+    <div class="buttons">
+      <button type="submit" [disabled]="form.invalid">
+        {{ isEdit ? 'Actualizar' : 'Crear' }}
+      </button>
+      <button type="button" (click)="cancel()">Cancelar</button>
+    </div>
+  </form>
+</div>

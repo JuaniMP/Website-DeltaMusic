@@ -1,0 +1,41 @@
+<!-- src/app/admin/components/transaction-list/transaction-list.component.html -->
+<div class="user-list-wrapper">
+  <h2 class="table-title">LISTA DE TRANSACCIONES</h2>
+  <table class="user-list-table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Compra</th>
+        <th>Fecha / Hora</th>
+        <th>Usuario</th>
+        <th>Valor</th>
+        <th>Método</th>
+        <th>Banco</th>
+        <th>Franquicia</th>
+        <th>Tarjeta</th>
+        <th>Estado</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngIf="!transactions?.length">
+        <td colspan="10" class="empty">No hay transacciones registradas.</td>
+      </tr>
+      <tr *ngFor="let tx of transactions">
+        <td class="count">{{ tx.id }}</td>
+        <td class="count">{{ tx.idCompra }}</td>
+        <td>{{ tx.fechaHora | date:'short' }}</td>
+        <td>{{ tx.identificacion }}</td>
+        <td class="count">{{ tx.valorTx | currency:'COP':'symbol' }}</td>
+        <td class="count">{{ tx.idMetodoPago }}</td>
+        <td>{{ tx.idBanco }}</td>
+        <td>{{ tx.idFranquicia }}</td>
+        <td>{{ tx.numTarjeta }}</td>
+        <td class="count">
+          <span [ngClass]="tx.estado === 1 ? 'active' : 'inactive'">
+            {{ tx.estado === 1 ? 'Activa' : 'Anulada' }}
+          </span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

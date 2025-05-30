@@ -9,9 +9,10 @@ import {
 } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { of, timer, Observable } from 'rxjs';
+import { of, timer } from 'rxjs';
 import { switchMap, map, catchError } from 'rxjs/operators';
-import { HttpErrorResponse, HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HttpErrorResponse } from '@angular/common/http';
+import { ToastrService } from 'ngx-toastr';
 
 import { AuthService } from '../auth.service';
 
@@ -19,28 +20,26 @@ import { AuthService } from '../auth.service';
   selector: 'app-register',
   standalone: true,
   imports: [
-    CommonModule,         // NgIf, NgClass, etc.
-    ReactiveFormsModule,  // formGroup, formControlName, etc.
-    RouterModule,         // para routerLink
-    HttpClientModule      // para HttpClient en AuthService
+    CommonModule,
+    ReactiveFormsModule,
+    RouterModule,
+    HttpClientModule
   ],
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css']
 })
 export class RegisterComponent {
   form: FormGroup;
-  showToast = false;
-  toastMessage = '';
-  toastType: 'success' | 'error' = 'success';
 
   constructor(
     private fb: FormBuilder,
     private auth: AuthService,
-    private router: Router
+    private router: Router,
+    private toastr: ToastrService
   ) {
     this.form = this.fb.group({
-      nombre:        ['', [Validators.required, Validators.minLength(2)]],
-      apellidos:     ['', [Validators.required, Validators.minLength(2)]],
+      nombre: ['', [Validators.required, Validators.minLength(2)]],
+      apellidos: ['', [Validators.required, Validators.minLength(2)]],
       correoUsuario: [
         '',
         [Validators.required, Validators.email],
@@ -51,18 +50,9 @@ export class RegisterComponent {
 
   get f() { return this.form.controls; }
 
-  private triggerToast(message: string, type: 'success' | 'error') {
-    this.toastMessage = message;
-    this.toastType = type;
-    this.showToast = true;
-    setTimeout(() => this.showToast = false, 3000);
-  }
-
   private emailTakenValidator(): AsyncValidatorFn {
     return (control: AbstractControl) => {
-      if (control.invalid || !control.value) {
-        return of(null);
-      }
+      if (control.invalid || !control.value) return of(null);
       return timer(500).pipe(
         switchMap(() => this.auth.checkEmail(control.value)),
         map(isTaken => isTaken ? { emailTaken: true } : null),
@@ -74,28 +64,43 @@ export class RegisterComponent {
   submit(): void {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
-      this.triggerToast('Por favor corrige los errores.', 'error');
+      this.mostrarToast('error', 'Por favor corrige los errores.', 'Formulario inválido');
       return;
     }
 
     const { nombre, apellidos, correoUsuario } = this.form.value;
     const loginUsrio = correoUsuario.trim().toLowerCase();
 
-    this.auth
-      .register({ nombre, apellidos, correoUsuario, loginUsrio })
-      .subscribe({
-        next: () => {
-          this.triggerToast('¡Registro exitoso!', 'success');
-          setTimeout(() => this.router.navigate(['/login']), 3000);
-        },
-        error: (err: HttpErrorResponse) => {
-          if (err.status === 409) {
-            this.f['correoUsuario'].setErrors({ emailTaken: true });
-            this.triggerToast('Este correo ya está registrado.', 'error');
-          } else {
-            this.triggerToast('Error al registrar, intenta más tarde.', 'error');
-          }
+    this.auth.register({ nombre, apellidos, correoUsuario, loginUsrio }).subscribe({
+      next: () => {
+        this.mostrarToast('success', '¡Registro exitoso!', 'Éxito');
+        setTimeout(() => this.router.navigate(['/login']), 3000);
+      },
+      error: (err: HttpErrorResponse) => {
+        if (err.status === 409) {
+          this.f['correoUsuario'].setErrors({ emailTaken: true });
+          this.mostrarToast('error', 'Este correo ya está registrado.', 'Correo duplicado');
+        } else {
+          this.mostrarToast('error', 'Error al registrar. Intenta más tarde.', 'Error del servidor');
         }
-      });
+      }
+    });
+  }
+
+  private mostrarToast(tipo: 'success' | 'error' | 'info' | 'warning', mensaje: string, titulo?: string): void {
+    switch (tipo) {
+      case 'success':
+        this.toastr.success(mensaje, titulo || 'Éxito');
+        break;
+      case 'error':
+        this.toastr.error(mensaje, titulo || 'Error');
+        break;
+      case 'info':
+        this.toastr.info(mensaje, titulo || 'Información');
+        break;
+      case 'warning':
+        this.toastr.warning(mensaje, titulo || 'Advertencia');
+        break;
+    }
   }
 }

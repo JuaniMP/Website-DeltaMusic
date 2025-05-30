@@ -1,0 +1,171 @@
+/* Host / contenedor principal */
+.vinilo-page {
+  position: relative;
+  min-height: 100vh;
+  background: url('/assets/images/background1.jpg') center/cover no-repeat;
+  overflow: hidden;
+  font-family: 'Cinzel', serif;
+}
+
+/* Overlay semitransparente */
+.vinilo-page .overlay {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 0;
+}
+
+/* Todo el contenido encima del overlay */
+.vinilo-page > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* FILTROS + BUSCADOR */
+.vinilo-page .filters {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 2rem;
+}
+.vinilo-page .filters select {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 50px;
+  background: rgba(255, 255, 255, 0.7);
+}
+.vinilo-page .search-wrapper {
+  margin-left: auto;
+  position: relative;
+}
+.vinilo-page .search-wrapper input {
+  padding: 0.5rem 2.5rem 0.5rem 1rem;
+  border: none;
+  border-radius: 50px;
+  background: rgba(255, 255, 255, 0.7);
+}
+.vinilo-page .search-wrapper button {
+  position: absolute;
+  right: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}
+.vinilo-page .search-wrapper button img {
+  width: 20px;
+  height: 20px;
+}
+
+/* TÍTULOS DE CARRUSEL */
+.vinilo-page .carousel-section h2,
+.vinilo-page .carousel-sectional h2 {
+  margin: 1rem 2rem;
+  color: #fff;
+  font-size: 1.5rem;
+  text-shadow: 0 0 6px rgba(0, 0, 0, 0.7);
+}
+
+/* CARRUSEL */
+.vinilo-page .carousel {
+  display: flex;
+  align-items: center;
+  padding: 0 2rem;
+}
+.vinilo-page .nav-arrow {
+  width: 36px;
+  height: 36px;
+  border: 2px solid #D2691E;
+  border-radius: 50%;
+  background: transparent;
+  color: #D2691E;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  opacity: 0.8;
+  transition: opacity 0.2s, transform 0.2s;
+}
+.vinilo-page .nav-arrow:hover {
+  opacity: 1;
+  transform: scale(1.1);
+}
+.vinilo-page .track {
+  display: flex;
+  overflow-x: auto;
+  gap: 1rem;
+  scroll-snap-type: x mandatory;
+  flex: 1;
+  padding: 1rem 0;
+}
+.vinilo-page .track::-webkit-scrollbar {
+  height: 6px;
+}
+.vinilo-page .track::-webkit-scrollbar-thumb {
+  background: rgba(210, 105, 30, 0.6);
+  border-radius: 3px;
+}
+
+/* TARJETAS */
+.vinilo-page .card {
+  min-width: 200px;
+  background: rgba(46, 46, 46, 0.6);
+  border: 2px solid transparent;
+  border-radius: 12px;
+  scroll-snap-align: start;
+  overflow: hidden;
+  transition: transform 0.2s, border 0.2s;
+  cursor: pointer;
+}
+.vinilo-page .card:hover {
+  transform: scale(1.05);
+  border-color: #D2691E;
+}
+.vinilo-page .card img {
+  width: 100%;
+  display: block;
+}
+.vinilo-page .info {
+  padding: 0.75rem;
+  text-align: center;
+}
+.vinilo-page .product-name,
+.vinilo-page .price {
+  color: #fff;
+  margin-bottom: 0.5rem;
+}
+.vinilo-page .price {
+  margin-bottom: 0.75rem;
+}
+.vinilo-page .info button {
+  padding: 0.4rem 0.8rem;
+  border: none;
+  border-radius: 4px;
+  background: #D2691E;
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.vinilo-page .info button:hover {
+  background: #993d08;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .vinilo-page .filters,
+  .vinilo-page .carousel-section,
+  .vinilo-page .carousel-sectional {
+    padding: 1rem;
+  }
+  .vinilo-page .nav-arrow {
+    width: 30px;
+    height: 30px;
+    font-size: 1rem;
+  }
+  .vinilo-page .card {
+    min-width: 150px;
+  }
+}

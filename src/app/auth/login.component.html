@@ -1,19 +1,27 @@
+<!-- src/app/auth/login.component.html -->
 <div class="login-container">
   <form [formGroup]="form" (ngSubmit)="submit()" class="login-card">
 
-    <!-- Logo arriba -->
+    <!-- Logo -->
     <img src="/assets/images/logo.png" alt="Logo" class="login-logo" />
 
-    <!-- Campo Email -->
+    <!-- Email Field -->
     <div class="field">
       <input
+        type="email"
         formControlName="correo"
         placeholder="INGRESA TU EMAIL"
         class="field-input"
       />
+      <small class="error" *ngIf="f['correo'].touched && f['correo'].hasError('required')">
+        El correo es obligatorio.
+      </small>
+      <small class="error" *ngIf="f['correo'].touched && f['correo'].hasError('email')">
+        Ingresa un correo válido.
+      </small>
     </div>
 
-    <!-- Campo Contraseña con botón de ojo -->
+    <!-- Password Field -->
     <div class="field password-wrapper">
       <input
         [type]="passwordFieldType"
@@ -22,16 +30,28 @@
         class="field-input"
       />
       <button type="button" class="toggle-pwd" (click)="togglePassword()">👁️</button>
+      <small class="error" *ngIf="f['clave'].touched && f['clave'].hasError('required')">
+        La contraseña es obligatoria.
+      </small>
+      <small class="error" *ngIf="f['clave'].touched && f['clave'].hasError('minlength')">
+        La contraseña debe tener al menos 6 caracteres.
+      </small>
     </div>
 
-    <!-- Botón Aceptar -->
-    <button type="submit" class="accept-btn">ACEPTAR</button>
+    <!-- Server-side Error Message -->
+    <div class="message error" *ngIf="errorMessage">
+      {{ errorMessage }}
+    </div>
 
-    <!-- Enlaces inferiores -->
+    <!-- Submit Button -->
+    <button type="submit" class="accept-btn" [disabled]="form.invalid">
+      ACEPTAR
+    </button>
+
+    <!-- Links -->
     <div class="links">
       <a routerLink="/forgot">¿HAS OLVIDADO TU CONTRASEÑA?</a>
       <a routerLink="/register">¿NO TIENES CUENTA? REGÍSTRATE EN DELTAMUSIC</a>
     </div>
-
   </form>
 </div>

@@ -1,0 +1,53 @@
+<!-- src/app/admin/components/product-list/product-list.component.html -->
+<div class="user-list-wrapper">
+  <h2 class="table-title">GESTIÓN DE PRODUCTOS</h2>
+  <table class="user-list-table">
+    <thead>
+      <tr>
+        <th>Referencia</th>
+        <th>Descripción</th>
+        <th>Precio</th>
+        <th>Existencia</th>
+        <th>Estado</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngIf="!productos?.length">
+        <td colspan="6" class="empty">No hay productos registrados.</td>
+      </tr>
+      <tr *ngFor="let prod of productos">
+        <td>{{ prod.referencia }}</td>
+        <td>{{ prod.descripcion }}</td>
+        <td class="count">{{ prod.precioVentaActual | currency:'COP':'symbol' }}</td>
+        <td class="count">{{ prod.existencia }}</td>
+        <td class="count">
+          <span [ngClass]="prod.estado === 1 ? 'active' : 'inactive'">
+            {{ prod.estado === 1 ? 'Activo' : 'Inactivo' }}
+          </span>
+        </td>
+        <td class="actions">
+          <!-- Editar -->
+          <button
+            [routerLink]="['/admin/products', prod.id, 'edit']"
+            title="Editar">
+            <i class="fas fa-edit"></i>
+          </button>
+          <!-- Borrar -->
+          <button
+            (click)="deleteProduct(prod.id)"
+            title="Borrar">
+            <i class="fas fa-trash-alt"></i>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Enlace para Crear Producto -->
+  <footer class="content-footer">
+    <a [routerLink]="['/admin/products/new']" class="create-link">
+      CREAR PRODUCTO
+    </a>
+  </footer>
+</div>

@@ -1,90 +1,67 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule }      from '@angular/common';
-import { AuthService }       from '../auth/auth.service';
+// src/app/usuario/usuario.component.ts
+import { Component, OnInit }     from '@angular/core';
+import { CommonModule }          from '@angular/common';
+import { Router }                from '@angular/router';
+import { AuthService }           from '../auth/auth.service';
+import { NotificationService }   from '../shared/notification.service';
 
-interface Album {
-  title: string;
-  artist: string;
-  imageUrl: string;
-  price: string;
-}
+import { VinilosComponent }      from './vinilos/vinilos.component';
+import { CdsComponent }          from './cds/cds.component';
+import { ProductoService }       from './producto/producto.service';
+import { Producto }              from './producto/producto.model';
 
 @Component({
   selector: 'app-usuario',
   standalone: true,
-  imports: [ CommonModule ],   // para NgFor, NgIf…
+  imports: [ CommonModule, VinilosComponent, CdsComponent ],
   templateUrl: './usuario.component.html',
   styleUrls: ['./usuario.component.css']
 })
 export class UsuarioComponent implements OnInit {
-  user: any;
-  view: 'vinilo' | 'cd' = 'vinilo';
+  section: 'vinilo' | 'cd' = 'vinilo';
 
-  mostSold: Album[] = [
-    {
-      title: 'Abbey Road',
-      artist: 'The Beatles',
-      imageUrl: '/assets/images/beatles.png',
-      price: '$20.000 COP'
-    },
-    {
-      title: 'Thriller',
-      artist: 'Michael Jackson',
-      imageUrl: '/assets/images/thriller.png',
-      price: '$18.000 COP'
-    },
-    {
-      title: 'Back in Black',
-      artist: 'AC/DC',
-      imageUrl: '/assets/images/back-in-black.png',
-      price: '$15.000 COP'
-    },
-    {
-      title: 'The Dark Side of the Moon',
-      artist: 'Pink Floyd',
-      imageUrl: '/assets/images/dark-side.png',
-      price: '$22.000 COP'
-    }
-  ];
+  viniloMostSold: Producto[] = [];
+  viniloByGenre:   Producto[] = [];
+  cdMostSold:      Producto[] = [];
+  cdByGenre:       Producto[] = [];
 
-  byGenre: Album[] = [
-    {
-      title: 'Comedia',
-      artist: 'Hector Lavoe',
-      imageUrl: '/assets/images/comedia.png',
-      price: '$17.000 COP'
-    },
-    {
-      title: 'Huellas del Pasado',
-      artist: 'Various Artists',
-      imageUrl: '/assets/images/huellas.png',
-      price: '$16.000 COP'
-    },
-    {
-      title: 'Triunfo',
-      artist: 'Grupo Niche',
-      imageUrl: '/assets/images/triunfo.png',
-      price: '$19.000 COP'
-    },
-    {
-      title: 'El Benzo',
-      artist: 'Benzo Martínez',
-      imageUrl: '/assets/images/elbenzo.png',
-      price: '$14.000 COP'
-    }
-  ];
-
-  constructor(private auth: AuthService) {}
+  constructor(
+    private auth: AuthService,
+    private router: Router,
+    private notify: NotificationService,
+    private productoSvc: ProductoService
+  ) {}
 
   ngOnInit(): void {
-    this.user = this.auth.getUser();
+    this.productoSvc.getAll().subscribe(products => {
+      const vinilos = products.filter(p => p.tipo === 'vinilo');
+      const cds     = products.filter(p => p.tipo === 'cd');
+
+      this.viniloMostSold = vinilos;
+      this.viniloByGenre  = vinilos;
+      this.cdMostSold     = cds;
+      this.cdByGenre      = cds;
+    });
   }
 
-  switchView(mode: 'vinilo' | 'cd'): void {
-    this.view = mode;
+  switchView(sec: 'vinilo' | 'cd'): void {
+    this.section = sec;
   }
 
-  trackByIndex(index: number): number {
-    return index;
+  onAddToCart(p: Producto): void {
+    this.notify.success('Añadido al carrito', `"${p.descripcion}" se añadió correctamente.`);
   }
+
+  logout(): void {
+    this.auth.logout();
+    this.router.navigate(['/login']);
+    this.notify.info('Sesión cerrada');
+  }
+   /** Método que abre o muestra el carrito */
+  openCart(): void {
+    // Por ejemplo, navegas a /carrito o muestras modal
+    this.router.navigate(['/carrito']);
+    this.notify.info('Carrito', 'Aquí verás tus productos');
+  }
+  
 }

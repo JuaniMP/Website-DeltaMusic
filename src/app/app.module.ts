@@ -1,33 +1,50 @@
-import { NgModule }            from '@angular/core';
-import { BrowserModule }       from '@angular/platform-browser';
-import { AppComponent }        from './app.component';
-import { AppRoutingModule }    from './app-routing.module';
+// src/app/app.module.ts
+import { NgModule }                  from '@angular/core';
+import { BrowserModule }             from '@angular/platform-browser';
+import { BrowserAnimationsModule }   from '@angular/platform-browser/animations';
+import { HttpClientModule }          from '@angular/common/http';
+import { ReactiveFormsModule }       from '@angular/forms';
 
-import { LoginComponent }      from './auth/login.component';
-import { NotFoundComponent }   from './common/not-found.component';
+import { AppComponent }              from './app.component';
+import { AppRoutingModule }          from './app-routing.module';
 
-import { HttpClientModule }    from '@angular/common/http';
-import { ReactiveFormsModule } from '@angular/forms';
+// Standalone components
+import { LoginComponent }            from './auth/login.component';
+import { RegisterComponent }         from './auth/register/register.component';
+import { ForgotComponent }           from './auth/forgot/forgot.component';
 
-// Importa los componentes standalone
-import { RegisterComponent }   from './auth/register/register.component';
-import { ForgotComponent }     from './auth/forgot/forgot.component';
+// Other declarations
+import { NotFoundComponent }         from './common/not-found.component';
+
+// Toastr for global notifications
+import { ToastrModule }              from 'ngx-toastr';
 
 @NgModule({
   declarations: [
     AppComponent,
-    LoginComponent,
     NotFoundComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule,
+    BrowserAnimationsModule,
     HttpClientModule,
     ReactiveFormsModule,
-    RegisterComponent, // Importa el componente standalone aquí
-    ForgotComponent    // Importa el componente standalone aquí
+    AppRoutingModule,
+
+    // Standalone routing components
+    RegisterComponent,
+    LoginComponent,
+    RegisterComponent,
+    ForgotComponent,
+    // Toast notifications
+    ToastrModule.forRoot({
+      positionClass: 'toast-top-right',
+      timeOut: 4000,
+      closeButton: false,
+      progressBar: true,
+      toastClass: 'ngx-toastr custom-toast'
+    })
   ],
-  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

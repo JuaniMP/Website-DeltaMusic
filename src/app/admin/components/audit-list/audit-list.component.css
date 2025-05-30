@@ -1,0 +1,76 @@
+/* Fondo oscuro para toda la vista, incluso al hacer scroll */
+:host {
+  display: block;
+  min-height: 100vh;
+  background: #232323 !important;
+}
+
+/* Si tu app tiene el <body> visible en la vista, puedes agregar esto globalmente:
+body, html {
+  background: #232323 !important;
+}
+*/
+
+/* Resto de tu CSS */
+.user-list-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 2rem;
+  background: #2f2f2f;
+}
+
+.user-list-table th,
+.user-list-table td {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid #444;
+}
+
+.user-list-table th {
+  background-color: #3a3a3a;
+  color: #ddd;
+  font-weight: 400;
+}
+
+.user-list-table tr:nth-child(even) td {
+  background-color: #2a2a2a;
+}
+
+/* Columnas numéricas centradas (por ejemplo ID) */
+.user-list-table td.count,
+.user-list-table td:nth-child(1) {
+  text-align: center;
+}
+
+/* Mensaje “vacío” */
+.user-list-table .empty {
+  text-align: center;
+  padding: 1.5rem;
+  color: #777;
+}
+
+/* Botones de acción (si los tuvieras) */
+.user-list-table td.actions {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.user-list-table button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.25rem;
+}
+
+.user-list-table button .icon,
+.user-list-table i {
+  font-size: 1.2rem;
+  color: #ccc;
+  transition: color 0.2s;
+}
+
+.user-list-table button .icon:hover,
+.user-list-table i:hover {
+  color: #fff;
+}

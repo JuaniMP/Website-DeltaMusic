@@ -1,9 +1,10 @@
 // src/app/auth/forgot/forgot.component.ts
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
-import { AuthService } from '../auth.service';
+import { CommonModule }   from '@angular/common';
+import { RouterModule }   from '@angular/router';
+import { AuthService }    from '../auth.service';
+import { NotificationService } from '../../shared/notification.service';
 
 @Component({
   selector: 'app-forgot',
@@ -15,12 +16,11 @@ import { AuthService } from '../auth.service';
 export class ForgotComponent {
   form: FormGroup;
   submitting = false;
-  message = '';
-  isError = false;
 
   constructor(
     private fb: FormBuilder,
-    private auth: AuthService
+    private auth: AuthService,
+    private notify: NotificationService
   ) {
     this.form = this.fb.group({
       correoUsuario: ['', [Validators.required, Validators.email]]
@@ -38,15 +38,18 @@ export class ForgotComponent {
     this.submitting = true;
     const email = this.form.value.correoUsuario.trim().toLowerCase();
 
+    // Mostrar toast de “enviando” inmediatamente
+    this.notify.info('Enviando correo de recuperación…');
+
     this.auth.requestPasswordReset(email).subscribe({
-      next: () => {
-        this.message = 'Te hemos enviado un correo con la contraseña temporal.';
-        this.isError = false;
+      next: (msg: string) => {
+        // Éxito: reemplaza el toast informativo por el de éxito
+        this.notify.success('¡Correo enviado!', msg);
+        this.form.reset();
         this.submitting = false;
       },
       error: () => {
-        this.message = 'No pudimos procesar tu petición. Intenta más tarde.';
-        this.isError = true;
+        this.notify.error('Error', 'No pudimos procesar tu petición. Intenta más tarde.');
         this.submitting = false;
       }
     });

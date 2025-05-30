@@ -1,0 +1,53 @@
+<!-- src/app/admin/components/create-product/create-product.component.html -->
+<div class="form-card">
+  <h2>{{ isEdit ? 'Editar Producto' : 'Crear Producto' }}</h2>
+  <form [formGroup]="form" (ngSubmit)="submit()">
+    <div class="field">
+      <input formControlName="referencia" placeholder="Referencia" />
+      <small *ngIf="form.get('referencia')?.touched && form.get('referencia')?.invalid">
+        Referencia obligatoria.
+      </small>
+    </div>
+
+    <div class="field">
+      <input formControlName="descripcion" placeholder="Descripción" />
+      <small *ngIf="form.get('descripcion')?.touched && form.get('descripcion')?.invalid">
+        Descripción obligatoria.
+      </small>
+    </div>
+
+    <div class="field">
+      <input
+        type="number"
+        formControlName="precioVentaActual"
+        placeholder="Precio de venta" />
+      <small *ngIf="form.get('precioVentaActual')?.hasError('min')">
+        Debe ser un valor positivo.
+      </small>
+    </div>
+
+    <div class="field">
+      <input
+        type="number"
+        formControlName="existencia"
+        placeholder="Existencia" />
+      <small *ngIf="form.get('existencia')?.hasError('min')">
+        Debe ser un valor positivo.
+      </small>
+    </div>
+
+    <div class="field switch">
+      <label>
+        <input type="checkbox" formControlName="estado" />
+        Activo
+      </label>
+    </div>
+
+    <div class="buttons">
+      <button type="submit" [disabled]="form.invalid">
+        {{ isEdit ? 'Actualizar' : 'Guardar' }}
+      </button>
+      <button type="button" (click)="cancel()">Cancelar</button>
+    </div>
+  </form>
+</div>

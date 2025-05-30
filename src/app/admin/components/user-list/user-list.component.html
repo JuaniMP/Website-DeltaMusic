@@ -1,0 +1,38 @@
+<div class="user-list-wrapper">
+  <h2>LISTA DE CLIENTES</h2>
+  <table class="user-list-table">
+    <thead>
+      <tr>
+        <th>Correo</th>
+        <th># de compras</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngIf="!users?.length">
+        <td colspan="3" class="empty">No hay usuarios registrados.</td>
+      </tr>
+      <tr *ngFor="let user of users">
+        <td>{{ user.correoUsuario }}</td>
+        <td class="count">{{ user.comprasCount || 0 }}</td>
+        <td class="actions">
+          <!-- Actualizar (editar) -->
+          <button (click)="editUser(user)" title="Editar usuario">
+            <i class="fas fa-edit"></i>
+          </button>
+          <!-- Activar / Desactivar -->
+          <button
+            (click)="toggleActive(user)"
+            [title]="user.estado ? 'Desactivar' : 'Activar'"
+            [ngClass]="user.estado ? 'btn-block' : 'btn-activate'">
+            <i class="fas" [ngClass]="user.estado ? 'fa-user-lock' : 'fa-user-check'"></i>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <footer class="content-footer">
+    <a [routerLink]="['/admin/users/new']">CREAR NUEVO USUARIO</a>
+  </footer>
+</div>

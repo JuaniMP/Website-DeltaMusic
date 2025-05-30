@@ -1,0 +1,74 @@
+<div class="vinilo-page">
+  <!-- capa oscura -->
+  <div class="overlay"></div>
+
+  <!-- filtros + buscador -->
+  <section class="filters">
+    <select>
+      <option>Géneros</option>
+      <option>Rock</option>
+      <option>Pop</option>
+      <option>Jazz</option>
+    </select>
+    <select>
+      <option>Año</option>
+      <option>1970s</option>
+      <option>1980s</option>
+      <option>1990s</option>
+    </select>
+    <div class="search-wrapper">
+      <input type="text" placeholder="Buscar…" />
+      <button>
+        <img src="/assets/images/search-icon.png" alt="Buscar" />
+      </button>
+    </div>
+  </section>
+
+  <!-- Carrusel: Los Más Vendidos (Vinilos) -->
+  <section class="carousel-section">
+    <h2>Los Más Vendidos</h2>
+    <div class="carousel">
+      <button class="nav-arrow left">&laquo;</button>
+      <div class="track">
+        <div
+          class="card"
+          *ngFor="let p of mostSold; trackBy: trackByIndex"
+        >
+          <img [src]="'assets/images/' + p.fotoProducto" [alt]="p.descripcion" />
+          <div class="info">
+            <div class="product-name">{{ p.descripcion }}</div>
+            <div class="price">
+              {{ p.precioVentaActual | currency:'COP':'symbol' }}
+            </div>
+            <button (click)="onAdd(p)">Comprar</button>
+          </div>
+        </div>
+      </div>
+      <button class="nav-arrow right">&raquo;</button>
+    </div>
+  </section>
+
+  <!-- Carrusel: Los Más Vendidos por Género (Vinilos) -->
+  <section class="carousel-sectional">
+    <h2>Los Más Vendidos por Género</h2>
+    <div class="carousel">
+      <button class="nav-arrow left">&laquo;</button>
+      <div class="track">
+        <div
+          class="card"
+          *ngFor="let p of byGenre; trackBy: trackByIndex"
+        >
+          <img [src]="'assets/images/' + p.fotoProducto" [alt]="p.descripcion" />
+          <div class="info">
+            <div class="product-name">{{ p.descripcion }}</div>
+            <div class="price">
+              {{ p.precioVentaActual | currency:'COP':'symbol' }}
+            </div>
+            <button (click)="onAdd(p)">Comprar</button>
+          </div>
+        </div>
+      </div>
+      <button class="nav-arrow right">&raquo;</button>
+    </div>
+  </section>
+</div>

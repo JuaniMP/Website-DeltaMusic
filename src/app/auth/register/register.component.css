@@ -11,39 +11,50 @@
   justify-content: center;
   height: 100%;
 }
+/* Estilos globales para toasts */
+.custom-toast {
+  font-family: 'Segoe UI', sans-serif;
+  font-size: 0.95rem;
+  border-radius: 10px !important;
+  padding: 14px !important;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.25) !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px;
+  animation: fadeSlideIn 0.4s ease forwards;
+  z-index: 9999 !important;
+}
 
-/* TOAST */
-.toast {
-  position: fixed;
-  top: 1rem;
-  right: 1rem;
-  display: flex;
-  align-items: center;
-  padding: 0.75rem 1rem;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-  color: #fff;
-  animation: slideIn 0.3s ease-out, fadeOut 0.3s ease-in 2.7s forwards;
-  z-index: 1000;
+.toast-success.custom-toast {
+  background-color: #2ecc71 !important;
+  color: white !important;
 }
-.toast .icon {
-  margin-right: 0.5rem;
-  font-size: 1.2rem;
+.toast-success.custom-toast::before {
+  content: '✔️';
+  font-size: 1.3rem;
 }
-.toast.success {
-  background-color: #4caf50;
+
+.toast-error.custom-toast {
+  background-color: #e74c3c !important;
+  color: white !important;
 }
-.toast.error {
-  background-color: #f44336;
+.toast-error.custom-toast::before {
+  content: '❌';
+  font-size: 1.3rem;
 }
-@keyframes slideIn {
-  from { transform: translateX(100%); opacity: 0; }
-  to   { transform: translateX(0);    opacity: 1; }
+
+@keyframes fadeSlideIn {
+  0% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
-@keyframes fadeOut {
-  to { opacity: 0; }
-}
-/* /TOAST */
+
+
 
 .login-card {
   background: rgba(0,0,0,0.6);

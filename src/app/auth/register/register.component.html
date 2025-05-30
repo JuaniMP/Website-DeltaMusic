@@ -1,10 +1,5 @@
 <div class="login-container">
 
-  <!-- TOAST -->
-  <div class="toast" *ngIf="showToast" [ngClass]="toastType">
-    <span class="icon">{{ toastType === 'success' ? '✅' : '❗' }}</span>
-    <span class="message">{{ toastMessage }}</span>
-  </div>
 
   <form [formGroup]="form" (ngSubmit)="submit()" class="login-card">
     <img src="/assets/images/logo.png" alt="Logo" class="login-logo" />

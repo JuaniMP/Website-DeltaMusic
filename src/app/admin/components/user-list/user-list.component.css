@@ -1,0 +1,101 @@
+.user-list-wrapper {
+  flex: 1;
+  overflow-x: auto;
+  padding: 1rem 2rem;
+  background: #222;
+}
+
+.user-list-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.user-list-table thead th {
+  padding: 0.75rem;
+  background: #333;
+  color: #f5e8c7;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+  letter-spacing: 1px;
+}
+
+.user-list-table tbody tr {
+  border-bottom: 1px solid #444;
+}
+
+.user-list-table tbody td {
+  padding: 0.75rem;
+  background: #2a2a2a;
+  color: #ddd;
+}
+
+.user-list-table td.count {
+  text-align: center;
+}
+
+.user-list-table .empty {
+  text-align: center;
+  padding: 1.5rem;
+  color: #777;
+}
+
+.user-list-table td.actions {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.user-list-table td.actions button {
+  background: #444;
+  border: none;
+  padding: 0.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.user-list-table td.actions button.btn-block {
+  background: #e74c3c; /* rojo */
+}
+.user-list-table td.actions button.btn-activate {
+  background: #27ae60; /* verde */
+}
+.user-list-table td.actions button.btn-block:hover,
+.user-list-table td.actions button.btn-activate:hover {
+  filter: brightness(1.15);
+}
+
+.user-list-table td.actions button:hover {
+  background: #555;
+}
+
+.user-list-table td.actions i {
+  color: #ccc;
+  font-size: 1rem;
+}
+
+.user-list-table td.actions button:hover i {
+  color: #fff;
+}
+
+.content-footer {
+  text-align: center;
+  padding: 1rem;
+  background: #181818;
+  border-top: 1px solid #333;
+}
+
+.content-footer a {
+  color: #f5e8c7;
+  font-size: 1.1rem;
+  text-decoration: none;
+  border: 1px solid #f5e8c7;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+
+.content-footer a:hover {
+  background: #f5e8c7;
+  color: #181818;
+}

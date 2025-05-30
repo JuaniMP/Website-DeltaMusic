@@ -95,3 +95,11 @@
 .links a:hover {
   color: #fff;
 }
+/* ... tus estilos previos ... */
+
+.message.error {
+  color: #f44336;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+}
+

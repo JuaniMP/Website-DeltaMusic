@@ -1,0 +1,58 @@
+/* Reutilizamos wrapper y tabla de user-list */
+.user-list-wrapper {
+  flex: 1;
+  overflow-x: auto;
+  padding: 1rem 2rem;
+  background: #222;
+}
+
+.table-title {
+  margin: 0 0 1rem;
+  font-family: 'Cinzel', serif;
+  color: #f5e8c7;
+  font-size: 1.5rem;
+}
+
+.user-list-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.user-list-table thead th {
+  padding: 0.75rem;
+  background: #3a3a3a;
+  color: #ddd;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+  letter-spacing: 1px;
+}
+
+.user-list-table tbody tr {
+  border-bottom: 1px solid #444;
+}
+
+.user-list-table tbody td {
+  padding: 0.75rem;
+  background: #2a2a2a;
+  color: #ddd;
+}
+
+/* Columnas numéricas centradas (ID, Items, Total) */
+.user-list-table td.count {
+  text-align: center;
+}
+
+/* Mensaje “vacío” */
+.user-list-table .empty {
+  text-align: center;
+  padding: 1.5rem;
+  color: #777;
+}
+
+/* Estado */
+.user-list-table td.count .active {
+  color: #4caf50; /* completada */
+}
+.user-list-table td.count .inactive {
+  color: #f44336; /* pendiente/anulada */
+}

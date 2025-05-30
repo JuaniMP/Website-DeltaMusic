@@ -1,0 +1,55 @@
+/* src/app/admin/components/create-user/create-user.component.css */
+.form-card {
+  max-width: 420px;
+  margin: 2rem auto;
+  padding: 1.5rem;
+  background: #2a2a2a;
+  border-radius: 6px;
+  font-family: 'Cinzel', serif;
+  color: #eee;
+}
+.form-card h2 {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+.field {
+  margin-bottom: 1rem;
+}
+.field input,
+.field select {
+  width: 100%;
+  padding: 0.6rem 1rem;
+  border: none;
+  border-radius: 4px;
+  background: #333;
+  color: #fff;
+}
+.field.small {
+  font-size: 0.85rem;
+  color: #f55;
+}
+.switch {
+  display: flex;
+  align-items: center;
+}
+.switch label {
+  cursor: pointer;
+}
+.buttons {
+  display: flex;
+  justify-content: space-between;
+}
+.buttons button {
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.buttons button[type="submit"] {
+  background: #f5e8c7;
+  color: #181818;
+}
+.buttons button[type="button"] {
+  background: #777;
+  color: #fff;
+}

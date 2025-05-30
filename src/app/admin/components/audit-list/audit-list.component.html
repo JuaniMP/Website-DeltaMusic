@@ -1,0 +1,31 @@
+<!-- src/app/admin/components/audit-list/audit-list.component.html -->
+<div class="user-list">
+  <h2>Auditoria</h2>
+  <table class="user-list-table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Usuario</th>
+        <th>Tabla</th>
+        <th>Acción</th>
+        <th>Fecha</th>
+        <th>Comentario</th>
+        <th>IP</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngIf="!filtered?.length">
+        <td colspan="7" class="empty">No hay registros de auditoría.</td>
+      </tr>
+      <tr *ngFor="let a of filtered">
+        <td>{{ a.id }}</td>
+        <td>{{ a.usrioAudtria }}</td>
+        <td>{{ a.tablaAccion }}</td>
+        <td>{{ a.accionAudtria }}</td>
+        <td>{{ a.fchaAudtria | date:'short' }}</td>
+        <td>{{ a.comentarioAudtria }}</td>
+        <td>{{ a.addressAudtria }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

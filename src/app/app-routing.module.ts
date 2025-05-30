@@ -1,20 +1,22 @@
 // src/app/app-routing.module.ts
-
-import { NgModule } from '@angular/core';
+import { NgModule }             from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-// Componentes standalone
+// componentes standalone
 import { LoginComponent }    from './auth/login.component';
 import { RegisterComponent } from './auth/register/register.component';
 import { ForgotComponent }   from './auth/forgot/forgot.component';
 
-// Otros componentes y guards
-import { NotFoundComponent }  from './common/not-found.component';
-import { RoleGuard }          from './auth/role.guard';
-import { AuthRedirectGuard }  from './auth/auth-redirect.guard';
+// demás
+import { NotFoundComponent }   from './common/not-found.component';
+import { AuthRedirectGuard }   from './auth/auth-redirect.guard';
+import { RoleGuard }           from './auth/role.guard';
 
 const routes: Routes = [
-  { path: '',           redirectTo: 'login', pathMatch: 'full' },
+  // 1) Redirección raíz
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
+
+  // 2) Rutas de autenticación
   {
     path: 'login',
     component: LoginComponent,
@@ -30,19 +32,29 @@ const routes: Routes = [
     component: ForgotComponent,
     canActivate: [AuthRedirectGuard]
   },
+
+  // 3) Lazy-load de zonas protegidas
   {
     path: 'usuario',
     canActivate: [RoleGuard],
+    data: { role: 'user' },
     loadChildren: () =>
       import('./usuario/usuario.module').then(m => m.UsuarioModule)
   },
+  {
+    path: 'admin',
+    canActivate: [RoleGuard],
+    data: { role: 'admin' },
+    loadChildren: () =>
+      import('./admin/admin.module').then(m => m.AdminModule)
+  },
+
+  // 4) Wildcard al final
   { path: '**', component: NotFoundComponent }
 ];
 
 @NgModule({
-  imports: [
-    RouterModule.forRoot(routes)  // <-- quitamos las opciones extras que daban error
-  ],
-  exports: [RouterModule]
+  imports: [ RouterModule.forRoot(routes) ],
+  exports: [ RouterModule ]
 })
 export class AppRoutingModule {}

@@ -1,8 +1,8 @@
+<!-- src/app/auth/forgot/forgot.component.html -->
 <div class="login-container">
   <form [formGroup]="form" (ngSubmit)="submit()" class="login-card">
     <div class="register-title">
-      ¿Olvidaste tu contraseña?<br>
-      ¡No hay problema!
+      ¿Olvidaste tu contraseña?<br>¡No hay problema!
     </div>
 
     <p class="info">
@@ -29,10 +29,6 @@
     <button type="submit" class="accept-btn" [disabled]="form.invalid || submitting">
       ACEPTAR
     </button>
-
-    <div class="message" [class.error]="isError" *ngIf="message">
-      {{ message }}
-    </div>
 
     <div class="links">
       <a routerLink="/login">← Volver al inicio de sesión</a>
