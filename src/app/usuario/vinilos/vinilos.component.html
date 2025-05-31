@@ -1,8 +1,9 @@
+<!-- src/app/usuario/vinilos/vinilos.component.html -->
 <div class="vinilo-page">
-  <!-- capa oscura -->
+  <!-- Capa oscura -->
   <div class="overlay"></div>
 
-  <!-- filtros + buscador -->
+  <!-- Filtros + buscador -->
   <section class="filters">
     <select>
       <option>Géneros</option>
@@ -19,28 +20,32 @@
     <div class="search-wrapper">
       <input type="text" placeholder="Buscar…" />
       <button>
-        <img src="/assets/images/search-icon.png" alt="Buscar" />
+        <img src="assets/images/search-icon.png" alt="Buscar" />
       </button>
     </div>
   </section>
 
+  <!-- Mensajes de carga o error -->
+  <div *ngIf="loading" class="loading">Cargando vinilos…</div>
+  <div *ngIf="errorMsg" class="error-msg">{{ errorMsg }}</div>
+
   <!-- Carrusel: Los Más Vendidos (Vinilos) -->
-  <section class="carousel-section">
+  <section class="carousel-section" *ngIf="!loading && !errorMsg">
     <h2>Los Más Vendidos</h2>
     <div class="carousel">
       <button class="nav-arrow left">&laquo;</button>
       <div class="track">
-        <div
-          class="card"
-          *ngFor="let p of mostSold; trackBy: trackByIndex"
-        >
-          <img [src]="'assets/images/' + p.fotoProducto" [alt]="p.descripcion" />
+        <div class="card" *ngFor="let p of viniloMostSold">
+          <img
+            [src]="'assets/images/' + p.fotoProducto"
+            [alt]="p.descripcion"
+          />
           <div class="info">
             <div class="product-name">{{ p.descripcion }}</div>
             <div class="price">
               {{ p.precioVentaActual | currency:'COP':'symbol' }}
             </div>
-            <button (click)="onAdd(p)">Comprar</button>
+            <button>Comprar</button>
           </div>
         </div>
       </div>
@@ -49,22 +54,22 @@
   </section>
 
   <!-- Carrusel: Los Más Vendidos por Género (Vinilos) -->
-  <section class="carousel-sectional">
+  <section class="carousel-sectional" *ngIf="!loading && !errorMsg">
     <h2>Los Más Vendidos por Género</h2>
     <div class="carousel">
       <button class="nav-arrow left">&laquo;</button>
       <div class="track">
-        <div
-          class="card"
-          *ngFor="let p of byGenre; trackBy: trackByIndex"
-        >
-          <img [src]="'assets/images/' + p.fotoProducto" [alt]="p.descripcion" />
+        <div class="card" *ngFor="let p of viniloByGenre">
+          <img
+            [src]="'assets/images/' + p.fotoProducto"
+            [alt]="p.descripcion"
+          />
           <div class="info">
             <div class="product-name">{{ p.descripcion }}</div>
             <div class="price">
               {{ p.precioVentaActual | currency:'COP':'symbol' }}
             </div>
-            <button (click)="onAdd(p)">Comprar</button>
+            <button>Comprar</button>
           </div>
         </div>
       </div>

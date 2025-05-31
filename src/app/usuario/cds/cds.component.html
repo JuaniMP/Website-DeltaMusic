@@ -1,8 +1,9 @@
+<!-- src/app/usuario/cds/cds.component.html -->
 <div class="cd-page">
-  <!-- capa oscura -->
+  <!-- Capa oscura -->
   <div class="overlay"></div>
 
-  <!-- filtros + buscador -->
+  <!-- Filtros + buscador -->
   <section class="filters">
     <select>
       <option>Géneros</option>
@@ -12,33 +13,39 @@
     </select>
     <select>
       <option>Año</option>
+      <option>1970s</option>
+      <option>1980s</option>
       <option>1990s</option>
-      <option>2000s</option>
-      <option>2010s</option>
     </select>
     <div class="search-wrapper">
       <input type="text" placeholder="Buscar…" />
-      <button><img src="/assets/images/search-icon.png" alt="Buscar" /></button>
+      <button>
+        <img src="assets/images/search-icon.png" alt="Buscar" />
+      </button>
     </div>
   </section>
 
-  <!-- Carrusel: Más Vendidos (CD) -->
-  <section class="carousel-section">
-    <h2>Más Vendidos (CD)</h2>
+  <!-- Mensaje de carga o error -->
+  <div *ngIf="loading" class="loading">Cargando CDs…</div>
+  <div *ngIf="errorMsg" class="error-msg">{{ errorMsg }}</div>
+
+  <!-- Carrusel: Los Más Vendidos (CDs) -->
+  <section class="carousel-section" *ngIf="!loading && !errorMsg">
+    <h2>Los Más Vendidos</h2>
     <div class="carousel">
       <button class="nav-arrow left">&laquo;</button>
       <div class="track">
-        <div
-          class="card"
-          *ngFor="let p of mostSold; trackBy: trackByIndex"
-        >
-          <img [src]="p.fotoProducto" [alt]="p.descripcion" />
+        <div class="card" *ngFor="let p of cdMostSold">
+          <img
+            [src]="'assets/images/' + p.fotoProducto"
+            [alt]="p.descripcion"
+          />
           <div class="info">
             <div class="product-name">{{ p.descripcion }}</div>
             <div class="price">
               {{ p.precioVentaActual | currency:'COP':'symbol' }}
             </div>
-            <button (click)="onAdd(p)">Comprar</button>
+            <button>Comprar</button>
           </div>
         </div>
       </div>
@@ -46,23 +53,23 @@
     </div>
   </section>
 
-  <!-- Carrusel: Populares por Género (CD) -->
-  <section class="carousel-section">
-    <h2>Populares por Género (CD)</h2>
+  <!-- Carrusel: Los Más Vendidos por Género (CDs) -->
+  <section class="carousel-sectional" *ngIf="!loading && !errorMsg">
+    <h2>Los Más Vendidos por Género</h2>
     <div class="carousel">
       <button class="nav-arrow left">&laquo;</button>
       <div class="track">
-        <div
-          class="card"
-          *ngFor="let p of byGenre; trackBy: trackByIndex"
-        >
-          <img [src]="p.fotoProducto" [alt]="p.descripcion" />
+        <div class="card" *ngFor="let p of cdByGenre">
+          <img
+            [src]="'assets/images/' + p.fotoProducto"
+            [alt]="p.descripcion"
+          />
           <div class="info">
             <div class="product-name">{{ p.descripcion }}</div>
             <div class="price">
               {{ p.precioVentaActual | currency:'COP':'symbol' }}
             </div>
-            <button (click)="onAdd(p)">Comprar</button>
+            <button>Comprar</button>
           </div>
         </div>
       </div>

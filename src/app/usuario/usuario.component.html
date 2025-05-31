@@ -1,5 +1,6 @@
 <!-- src/app/usuario/usuario.component.html -->
 <div class="usuario-container">
+  <!-- HEADER -->
   <header class="usuario-header">
     <div class="logo-area">
       <img src="/assets/images/logo.png" alt="Deltamusic" class="logo" />
@@ -8,7 +9,7 @@
     <nav class="top-nav">
       <button
         class="icon-btn vinilo-btn"
-        [class.active]="section==='vinilo'"
+        [class.active]="section === 'vinilo'"
         (click)="switchView('vinilo')"
       >
         <img src="/assets/images/vinilo-icon.png" alt="Vinilo" />
@@ -16,7 +17,7 @@
 
       <button
         class="icon-btn cd-btn"
-        [class.active]="section==='cd'"
+        [class.active]="section === 'cd'"
         (click)="switchView('cd')"
       >
         <img src="/assets/images/cd-icon.png" alt="CD" />
@@ -32,25 +33,12 @@
     </nav>
   </header>
 
-  <app-vinilos
-  *ngIf="section==='vinilo'"
-  [mostSold]="viniloMostSold"
-  [byGenre]="viniloByGenre"
-  [onAdd]="onAddToCart.bind(this)"
-  [onSwitch]="switchView.bind(this)"
-  [onLogout]="logout.bind(this)"
-  [onCart]="openCart.bind(this)"
-></app-vinilos>
-<!-- implementa openCart() donde necesites -->
+  <!-- CONTENIDO PRINCIPAL -->
+  <main class="usuario-main">
+    <!-- Mostrar VinilosComponent cuando section === 'vinilo' -->
+    <app-vinilos *ngIf="section === 'vinilo'"></app-vinilos>
 
-
-  <app-cds
-  *ngIf="section==='cd'"
-  [mostSold]="cdMostSold"
-  [byGenre]="cdByGenre"
-  [onAdd]="onAddToCart.bind(this)"
-  [onLogout]="logout.bind(this)"
-  [onSwitch]="switchView.bind(this)"
-></app-cds>
-
+    <!-- Mostrar CdsComponent cuando section === 'cd' -->
+    <app-cds *ngIf="section === 'cd'"></app-cds>
+  </main>
 </div>
