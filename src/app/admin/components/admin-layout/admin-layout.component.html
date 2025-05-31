@@ -1,0 +1,37 @@
+<!-- src/app/admin/components/admin-layout/admin-layout.component.html -->
+<div class="admin-wrapper">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <h2>OPCIONES<br/>ADMIN</h2>
+    </div>
+    <nav class="sidebar-nav">
+      <a routerLink="users" routerLinkActive="active">GESTIÓN DE CLIENTES</a>
+      <a routerLink="products" routerLinkActive="active">GESTIÓN DE PRODUCTOS</a>
+      <a routerLink="audit" routerLinkActive="active">CONSULTAR AUDITORÍA</a>
+      <a routerLink="stats" routerLinkActive="active">CONSULTAR ESTADÍSTICAS</a>
+      <a routerLink="transactions" routerLinkActive="active">LISTA DE TRANSACCIONES</a>
+    </nav>
+  </aside>
+
+  <!-- Main content -->
+  <section class="content">
+    <!-- Header -->
+    <header class="content-header">
+      <div class="search">
+        <input type="text" placeholder="Buscar..." />
+        <i class="fas fa-search"></i>
+      </div>
+      <div class="header-actions">
+        <div class="avatar">
+          <i class="fas fa-user-circle"></i>
+          <span>ADMIN</span>
+        </div>
+        <button class="logout-btn" (click)="logout()">Cerrar sesión</button>
+      </div>
+    </header>
+
+    <!-- Aquí se renderiza UserListComponent -->
+    <router-outlet></router-outlet>
+  </section>
+</div>

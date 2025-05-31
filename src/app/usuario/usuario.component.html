@@ -30,6 +30,7 @@
     </nav>
   </header>
 
+<<<<<<< Updated upstream
   <!-- Toggle Vinilo/CD -->
   <div class="usuario-header">
     <a
@@ -111,5 +112,27 @@
       <button class="nav-arrow right">&raquo;</button>
     </div>
   </section>
+=======
+  <!-- src/app/usuario/usuario.component.html -->
+<app-vinilos
+  *ngIf="section === 'vinilo'"
+  [mostSold]="viniloMostSold"
+  [byGenre]="viniloByGenre"
+  [onAdd]="onAddToCart.bind(this)"
+  [onSwitch]="switchView.bind(this)"
+  [onLogout]="logout.bind(this)"
+  [onCart]="openCart.bind(this)">
+</app-vinilos>
+
+ <app-cds
+  *ngIf="section==='cd'"
+  [mostSold]="cdMostSold"
+  [byGenre]="cdByGenre"
+  [onAdd]="onAddToCart.bind(this)"
+  [onLogout]="logout.bind(this)"
+  [onSwitch]="switchView.bind(this)"
+></app-cds>
+>>>>>>> Stashed changes
+
 
 </div>

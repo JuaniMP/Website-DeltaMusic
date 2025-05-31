@@ -77,7 +77,27 @@ export class UsuarioComponent implements OnInit {
   constructor(private auth: AuthService) {}
 
   ngOnInit(): void {
+<<<<<<< Updated upstream
     this.user = this.auth.getUser();
+=======
+    this.productoSvc.getAll().subscribe({
+      next: (products) => {
+        console.log('Productos recibidos:', products);
+        const vinilos = products.filter(p => p.tipo === 'vinilo');
+        const cds     = products.filter(p => p.tipo === 'cd');
+
+        // Aquí podrías filtrar/ordenar por más vendidos o por género si tienes datos
+        this.viniloMostSold = vinilos;
+        this.viniloByGenre  = vinilos;
+        this.cdMostSold     = cds;
+        this.cdByGenre      = cds;
+      },
+      error: err => {
+        console.error('Error al cargar productos', err);
+        this.notify.error('Error cargando productos');
+      }
+    });
+>>>>>>> Stashed changes
   }
 
   switchView(mode: 'vinilo' | 'cd'): void {
@@ -87,4 +107,19 @@ export class UsuarioComponent implements OnInit {
   trackByIndex(index: number): number {
     return index;
   }
+<<<<<<< Updated upstream
+=======
+
+  logout(): void {
+    this.auth.logout();
+    this.router.navigate(['/login']);
+    this.notify.info('Sesión cerrada');
+  }
+
+  /** Método que abre o muestra el carrito */
+  openCart(): void {
+    this.router.navigate(['/carrito']);
+    this.notify.info('Carrito', 'Aquí verás tus productos');
+  }
+>>>>>>> Stashed changes
 }

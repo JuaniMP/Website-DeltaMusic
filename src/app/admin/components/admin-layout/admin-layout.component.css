@@ -1,0 +1,169 @@
+/* Contenedor principal */
+.admin-wrapper {
+  display: flex;
+  height: 100vh;
+  font-family: 'Cinzel', serif;
+  background-color: #222;
+  color: #eee;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 220px;
+  background: #1b1b1b;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem 0;
+  box-shadow: 2px 0 5px rgba(0,0,0,0.5);
+}
+
+.sidebar-logo {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.sidebar-logo h2 {
+  margin: 0;
+  font-size: 1.2rem;
+  line-height: 1.3;
+  color: #f5e8c7;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-nav a {
+  padding: 0.75rem 1.5rem;
+  color: #ccc;
+  text-decoration: none;
+  border-left: 4px solid transparent;
+  transition: background 0.2s, color 0.2s, border-left 0.2s;
+}
+
+.sidebar-nav a:hover,
+.sidebar-nav a.active {
+  background: #333;
+  color: #fff;
+  border-left: 4px solid #f5e8c7;
+}
+
+/* Sección de contenido */
+.content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header interno */
+.content-header {
+  display: flex;
+  align-items: center;
+  padding: 1rem 2rem;
+  background: #181818;
+  border-bottom: 1px solid #333;
+  position: relative;
+  z-index: 2;
+}
+
+.content-header h1 {
+  margin: 0;
+  font-size: 1.8rem;
+  flex: 1;
+  color: #f5e8c7;
+}
+
+/* Buscar */
+.content-header .search {
+  position: relative;
+  flex: 1;
+  max-width: 400px;
+  margin: 0 2rem;
+}
+
+.content-header .search input {
+  width: 100%;
+  padding: 0.6rem 2.5rem 0.6rem 1rem;
+  border-radius: 20px;
+  border: none;
+  background: #333;
+  color: #fff;
+}
+
+.content-header .search i {
+  position: absolute;
+  top: 50%;
+  right: 1rem;
+  transform: translateY(-50%);
+  color: #aaa;
+  font-size: 1.1rem;
+}
+
+/* Avatar y acciones del header */
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  margin-left: 1.5rem;
+}
+
+.content-header .avatar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #f5e8c7;
+}
+
+.content-header .avatar i {
+  font-size: 2rem;
+}
+
+/* BOTÓN DE CERRAR SESIÓN INTEGRADO */
+.logout-btn {
+  background: #181818;
+  color: #f5e8c7;
+  border: 1.5px solid #f5e8c7;
+  padding: 0.4rem 1.1rem;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-family: 'Cinzel', serif;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition:
+    background 0.22s,
+    color 0.22s,
+    box-shadow 0.18s,
+    border-color 0.22s,
+    transform 0.10s;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.logout-btn i {
+  font-size: 1.15em;
+}
+
+.logout-btn:hover,
+.logout-btn:focus {
+  background: #232323;
+  color: #ffe8a3;
+  border-color: #ffe8a3;
+  transform: translateY(-2px) scale(1.04);
+  box-shadow: 0 4px 16px rgba(245, 232, 199, 0.09);
+}
+
+/* Responsive para header y botón */
+@media (max-width: 600px) {
+  .logout-btn {
+    padding: 0.2rem 0.7rem;
+    font-size: 0.96rem;
+  }
+  .content-header .search {
+    max-width: 180px;
+    margin: 0 0.7rem;
+  }
+}
