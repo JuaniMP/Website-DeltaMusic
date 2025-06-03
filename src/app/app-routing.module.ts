@@ -2,21 +2,20 @@
 import { NgModule }             from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-// componentes standalone
+// componentes standalone:
 import { LoginComponent }    from './auth/login.component';
 import { RegisterComponent } from './auth/register/register.component';
 import { ForgotComponent }   from './auth/forgot/forgot.component';
+import { CarritoComponent } from './carrito/carrito.component';
 
-// demás
-import { NotFoundComponent }   from './common/not-found.component';
-import { AuthRedirectGuard }   from './auth/auth-redirect.guard';
-import { RoleGuard }           from './auth/role.guard';
+// demás:
+import { NotFoundComponent } from './common/not-found.component';
+import { AuthRedirectGuard } from './auth/auth-redirect.guard';
+import { RoleGuard }         from './auth/role.guard';
 
 const routes: Routes = [
-  // 1) Redirección raíz
   { path: '', redirectTo: 'login', pathMatch: 'full' },
 
-  // 2) Rutas de autenticación
   {
     path: 'login',
     component: LoginComponent,
@@ -33,13 +32,18 @@ const routes: Routes = [
     canActivate: [AuthRedirectGuard]
   },
 
-  // 3) Lazy-load de zonas protegidas
   {
     path: 'usuario',
     canActivate: [RoleGuard],
     data: { role: 'user' },
     loadChildren: () =>
       import('./usuario/usuario.module').then(m => m.UsuarioModule)
+  },
+  {
+    path: 'carrito',
+    component: CarritoComponent,
+    canActivate: [RoleGuard],
+    data: { role: 'user' }
   },
   {
     path: 'admin',
@@ -49,7 +53,7 @@ const routes: Routes = [
       import('./admin/admin.module').then(m => m.AdminModule)
   },
 
-  // 4) Wildcard al final
+  // Wildcard al final:
   { path: '**', component: NotFoundComponent }
 ];
 

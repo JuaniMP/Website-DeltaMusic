@@ -1,3 +1,10 @@
+/* Añadimos la imagen de fondo “background2.jpg” para todo el host */
+:host {
+  display: block;
+  position: relative;
+  min-height: 100vh;
+  background: url('/assets/images/background2.jpg') center/cover no-repeat;
+}
 
 /* OVERLAY SEMITRANSPARENTE */
 .cd-page .overlay {
@@ -59,7 +66,8 @@
 }
 
 /* TÍTULOS */
-.cd-page .carousel-section h2 {
+.cd-page .carousel-section h2,
+.cd-page .carousel-sectional h2 {
   margin: 1rem 2rem;
   color: #fff;
   font-family: 'Cinzel', serif;
@@ -125,8 +133,7 @@
   cursor: pointer;
 }
 
-.cd-page .card:hover,
-.cd-page .card.selected {
+.cd-page .card:hover {
   transform: scale(1.05);
   border-color: #D2691E;
 }
@@ -152,24 +159,58 @@
   margin-bottom: 0.75rem;
 }
 
-.cd-page .info button {
-  padding: 0.4rem 0.8rem;
+/* ─── Estilos para el selector de cantidad ─── */
+.cd-page .quantity-selector {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+.cd-page .quantity-selector button {
+  width: 30px;
+  height: 30px;
   border: none;
   border-radius: 4px;
-  background: #D2691E;
+  background: #007bff;       /* Color azul */
   color: #fff;
+  font-size: 1.2rem;
   cursor: pointer;
   transition: background 0.2s;
 }
+.cd-page .quantity-selector button:hover {
+  background: #0056b3;       /* Azul más oscuro en hover */
+}
+.cd-page .quantity-selector span {
+  color: #fff;
+  font-size: 1rem;
+  min-width: 20px;
+  display: inline-block;
+}
 
-.cd-page .info button:hover {
-  background: #993d08;
+/* Botón “Comprar” */
+.cd-page .buy-btn {
+  padding: 0.4rem 0.8rem;
+  border: none;
+  border-radius: 4px;
+  background: #007bff;       /* Color azul */
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.2s, opacity 0.2s;
+}
+.cd-page .buy-btn[disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.cd-page .buy-btn:hover:not([disabled]) {
+  background: #0056b3;       /* Azul más oscuro en hover */
 }
 
 /* RESPONSIVE */
 @media (max-width: 768px) {
   .cd-page .filters,
-  .cd-page .carousel-section {
+  .cd-page .carousel-section,
+  .cd-page .carousel-sectional {
     padding: 1rem;
   }
   .cd-page .nav-arrow {
@@ -181,11 +222,3 @@
     min-width: 150px;
   }
 }
-:host {
-  display: block;
-  position: relative;
-  min-height: 100vh;
-  background: url('/assets/images/background2.jpg') center/cover no-repeat;
-}
-
-

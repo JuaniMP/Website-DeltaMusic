@@ -12,6 +12,9 @@ import { AppRoutingModule }          from './app-routing.module';
 import { LoginComponent }            from './auth/login.component';
 import { RegisterComponent }         from './auth/register/register.component';
 import { ForgotComponent }           from './auth/forgot/forgot.component';
+import { CarritoComponent }       from './carrito/carrito.component';
+import { VinilosComponent }       from './usuario/vinilos/vinilos.component';
+import { CdsComponent }           from './usuario/cds/cds.component';
 
 // Other declarations
 import { NotFoundComponent }         from './common/not-found.component';
@@ -34,6 +37,9 @@ import { ToastrModule }              from 'ngx-toastr';
     // Standalone routing components
     RegisterComponent,
     LoginComponent,
+    CarritoComponent,
+    VinilosComponent,
+    CdsComponent,
     RegisterComponent,
     ForgotComponent,
     // Toast notifications

@@ -1,44 +1,41 @@
 <!-- src/app/usuario/usuario.component.html -->
 <div class="usuario-container">
-  <!-- HEADER -->
+  <!-- HEADER: Logo + Íconos + Botones de Navegación -->
   <header class="usuario-header">
     <div class="logo-area">
       <img src="/assets/images/logo.png" alt="Deltamusic" class="logo" />
       <span class="logo-text">Deltamusic</span>
     </div>
     <nav class="top-nav">
-      <button
-        class="icon-btn vinilo-btn"
-        [class.active]="section === 'vinilo'"
-        (click)="switchView('vinilo')"
-      >
+      <!-- Botón Vinilos -->
+      <button class="icon-btn vinilo-btn" (click)="goToVinilos()" title="Vinilos">
         <img src="/assets/images/vinilo-icon.png" alt="Vinilo" />
       </button>
 
-      <button
-        class="icon-btn cd-btn"
-        [class.active]="section === 'cd'"
-        (click)="switchView('cd')"
-      >
+      <!-- Botón CDs -->
+      <button class="icon-btn cd-btn" (click)="goToCds()" title="CDs">
         <img src="/assets/images/cd-icon.png" alt="CD" />
       </button>
 
-      <button class="icon-btn client-btn">
+      <!-- Botón Carrito -->
+      <button class="icon-btn cart-btn" (click)="openCart()" title="Ver carrito">
+        <img src="/assets/images/cart-icon.png" alt="Carrito" />
+      </button>
+
+      <!-- Botón Cliente (Editar Perfil) -->
+      <button class="icon-btn client-btn" (click)="goToEditProfile()" title="Editar perfil">
         <img src="/assets/images/user-icon.png" alt="Cliente" />
       </button>
 
-      <button class="icon-btn logout-btn" (click)="logout()">
+      <!-- Botón Logout -->
+      <button class="icon-btn logout-btn" (click)="logout()" title="Cerrar sesión">
         <img src="/assets/images/logout-icon.png" alt="Cerrar sesión" />
       </button>
     </nav>
   </header>
 
-  <!-- CONTENIDO PRINCIPAL -->
+  <!-- MAIN: aquí se inyecta VINILOS, o CDS, o EDIT-PROFILE según la ruta actual -->
   <main class="usuario-main">
-    <!-- Mostrar VinilosComponent cuando section === 'vinilo' -->
-    <app-vinilos *ngIf="section === 'vinilo'"></app-vinilos>
-
-    <!-- Mostrar CdsComponent cuando section === 'cd' -->
-    <app-cds *ngIf="section === 'cd'"></app-cds>
+    <router-outlet></router-outlet>
   </main>
 </div>

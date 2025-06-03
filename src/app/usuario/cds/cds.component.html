@@ -1,4 +1,3 @@
-<!-- src/app/usuario/cds/cds.component.html -->
 <div class="cd-page">
   <!-- Capa oscura -->
   <div class="overlay"></div>
@@ -29,9 +28,9 @@
   <div *ngIf="loading" class="loading">Cargando CDs…</div>
   <div *ngIf="errorMsg" class="error-msg">{{ errorMsg }}</div>
 
-  <!-- Carrusel: Los Más Vendidos (CDs) -->
+  <!-- Carrusel: Los Más Vendidos (CDs en inglés) -->
   <section class="carousel-section" *ngIf="!loading && !errorMsg">
-    <h2>Los Más Vendidos</h2>
+    <h2>Los Más Vendidos (Inglés)</h2>
     <div class="carousel">
       <button class="nav-arrow left">&laquo;</button>
       <div class="track">
@@ -45,7 +44,22 @@
             <div class="price">
               {{ p.precioVentaActual | currency:'COP':'symbol' }}
             </div>
-            <button>Comprar</button>
+
+            <!-- Cantidad (− / número / +) -->
+            <div class="quantity-selector">
+              <button (click)="decrementQuantity(p)">−</button>
+              <span>{{ quantities[p.id] }}</span>
+              <button (click)="incrementQuantity(p)">+</button>
+            </div>
+
+            <!-- Botón “Comprar” (deshabilitado si quantities[p.id] === 0) -->
+            <button
+              class="buy-btn"
+              (click)="addToCart(p)"
+              [disabled]="quantities[p.id] === 0"
+            >
+              Comprar
+            </button>
           </div>
         </div>
       </div>
@@ -53,9 +67,9 @@
     </div>
   </section>
 
-  <!-- Carrusel: Los Más Vendidos por Género (CDs) -->
+  <!-- Carrusel: Los Más Vendidos (CDs en español) -->
   <section class="carousel-sectional" *ngIf="!loading && !errorMsg">
-    <h2>Los Más Vendidos por Género</h2>
+    <h2>Los Más Vendidos (Español)</h2>
     <div class="carousel">
       <button class="nav-arrow left">&laquo;</button>
       <div class="track">
@@ -69,7 +83,22 @@
             <div class="price">
               {{ p.precioVentaActual | currency:'COP':'symbol' }}
             </div>
-            <button>Comprar</button>
+
+            <!-- Cantidad (− / número / +) -->
+            <div class="quantity-selector">
+              <button (click)="decrementQuantity(p)">−</button>
+              <span>{{ quantities[p.id] }}</span>
+              <button (click)="incrementQuantity(p)">+</button>
+            </div>
+
+            <!-- Botón “Comprar” (deshabilitado si quantities[p.id] === 0) -->
+            <button
+              class="buy-btn"
+              (click)="addToCart(p)"
+              [disabled]="quantities[p.id] === 0"
+            >
+              Comprar
+            </button>
           </div>
         </div>
       </div>

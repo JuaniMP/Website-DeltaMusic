@@ -1,0 +1,132 @@
+<!-- src/app/usuario/tarjeta/tarjeta.component.html -->
+<div class="tarjeta-page">
+  <div class="tarjeta-content">
+    <div class="tarjeta-card">
+      <h2>Pago con Tarjeta</h2>
+
+      <form [formGroup]="tarjetaForm" (ngSubmit)="payViaTarjeta()">
+        <!-- 1) Identificación (editable, sin traerla del backend) -->
+        <div class="field">
+          <label for="identificacion">Identificación:</label>
+          <input
+            id="identificacion"
+            type="text"
+            formControlName="identificacion"
+            placeholder="Ingresa tu número de cédula / NIT"
+            class="field-input"
+            [disabled]="isLoading"
+          />
+          <div class="error" 
+               *ngIf="f['identificacion'].touched && f['identificacion'].invalid">
+            Debes ingresar tu número de identificación.
+          </div>
+        </div>
+
+        <!-- 2) Número de Tarjeta (ahora en formato XXXX-XXXX-XXXX-XXXX) -->
+        <div class="field">
+          <label for="numeroTarjeta">Número de Tarjeta:</label>
+          <input
+            id="numeroTarjeta"
+            type="text"
+            formControlName="numeroTarjeta"
+            placeholder="XXXX-XXXX-XXXX-XXXX"
+            class="field-input"
+            [disabled]="isLoading"
+            maxlength="19"
+          />
+          <div class="error"
+               *ngIf="f['numeroTarjeta'].touched && f['numeroTarjeta'].errors?.['required']">
+            El número de tarjeta es obligatorio.
+          </div>
+          <div class="error"
+               *ngIf="f['numeroTarjeta'].touched && f['numeroTarjeta'].errors?.['pattern']">
+            Debe tener formato 16 dígitos separados por guiones (ej: 1234-5678-9012-3456).
+          </div>
+          <div class="error"
+               *ngIf="f['numeroTarjeta'].touched && f['numeroTarjeta'].errors?.['allSame']">
+            No puede ingresar 16 dígitos idénticos.
+          </div>
+        </div>
+
+        <!-- 3) Marca/Franquicia -->
+        <div class="field">
+          <label for="franquicia">Marca/Franquicia:</label>
+          <select
+            id="franquicia"
+            formControlName="franquicia"
+            class="field-select"
+            [disabled]="isLoading"
+          >
+            <option value="" disabled selected>-- Seleccione Franquicia --</option>
+            <option>Visa</option>
+            <option>Mastercard</option>
+            <option>American Express</option>
+            <option>Discover</option>
+          </select>
+          <div class="error" *ngIf="f['franquicia'].touched && f['franquicia'].invalid">
+            Debes seleccionar la franquicia.
+          </div>
+        </div>
+
+        <!-- 4) Fecha de Expiración y CVV -->
+        <div class="field-inline">
+          <div class="field half-width">
+            <label for="expiracion">Expiración (MM/AA):</label>
+            <input
+              id="expiracion"
+              type="text"
+              formControlName="expiracion"
+              placeholder="MM/AA"
+              class="field-input"
+              [disabled]="isLoading"
+              maxlength="5"
+            />
+            <div class="error"
+                 *ngIf="f['expiracion'].touched && f['expiracion'].invalid">
+              Formato inválido. Ej: 12/25
+            </div>
+          </div>
+
+          <div class="field half-width">
+            <label for="cvv">CVV:</label>
+            <input
+              id="cvv"
+              type="password"
+              formControlName="cvv"
+              placeholder="XXX"
+              class="field-input"
+              [disabled]="isLoading"
+              maxlength="3"
+            />
+            <div class="error" *ngIf="f['cvv'].touched && f['cvv'].invalid">
+              Ingresa el CVV (3 dígitos).
+            </div>
+          </div>
+        </div>
+
+        <!-- 5) Botones -->
+        <button
+          type="submit"
+          class="tarjeta-btn"
+          [disabled]="isLoading || tarjetaForm.invalid"
+        >
+          Pagar con Tarjeta
+        </button>
+        <button
+          type="button"
+          class="cancel-btn"
+          (click)="cancelar()"
+          [disabled]="isLoading"
+        >
+          Regresar al carrito
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- SPINNER OVERLAY -->
+  <div *ngIf="isLoading" class="spinner-backdrop">
+  <div class="spinner"></div>
+</div>
+
+</div>

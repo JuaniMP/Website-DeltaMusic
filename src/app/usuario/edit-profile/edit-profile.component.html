@@ -1,0 +1,103 @@
+<!-- src/app/usuario/components/edit-profile/edit-profile.component.html -->
+
+<div class="edit-profile-wrapper">
+  <!-- Capa oscura encima del fondo -->
+  <div class="background-overlay"></div>
+
+  <div class="edit-card">
+    <h2>Editar Perfil</h2>
+
+    <!-- Mensajes de carga / error -->
+    <div *ngIf="loading" class="loading">Cargando datos…</div>
+    <div *ngIf="errorMsg" class="error-msg">{{ errorMsg }}</div>
+
+    <!-- ── FORMULARIO ── -->
+    <form [formGroup]="form" *ngIf="!loading">
+      <!-- ===== Sección: Información de Cuenta ===== -->
+      <div class="section-title">Información de Cuenta</div>
+
+      <!-- Correo electrónico (Login) -->
+      <div class="form-group">
+        <label for="correoUsuario">Correo electrónico (Login)</label>
+        <input
+          id="correoUsuario"
+          type="email"
+          formControlName="correoUsuario"
+        />
+        <small class="error"
+               *ngIf="f['correoUsuario'].touched && f['correoUsuario'].hasError('required')">
+          El correo es obligatorio.
+        </small>
+        <small class="error"
+               *ngIf="f['correoUsuario'].touched && f['correoUsuario'].hasError('email')">
+          Ingresa un correo válido.
+        </small>
+      </div>
+
+      <!-- Botón para mostrar/ocultar campos de contraseña -->
+      <button
+        type="button"
+        class="toggle-password-btn"
+        (click)="togglePasswordFields()"
+      >
+        {{ showPasswordFields
+            ? 'Ocultar campos de contraseña'
+            : 'Cambiar contraseña' }}
+      </button>
+
+      <!-- Campos de contraseña, solo si showPasswordFields = true -->
+      <div *ngIf="showPasswordFields" class="password-fields">
+        <div class="form-group">
+          <label for="claveUsrio">Contraseña nueva</label>
+          <input
+            id="claveUsrio"
+            type="password"
+            formControlName="claveUsrio"
+          />
+          <small class="error"
+                 *ngIf="f['claveUsrio'].touched && f['claveUsrio'].hasError('required')">
+            La contraseña es obligatoria.
+          </small>
+          <small class="error"
+                 *ngIf="f['claveUsrio'].touched && f['claveUsrio'].hasError('weakPassword')">
+            Debe tener 6–8 caracteres, 1 mayúscula, 1 minúscula y 1 número.
+          </small>
+        </div>
+
+        <div class="form-group">
+          <label for="confirmPassword">Confirmar contraseña</label>
+          <input
+            id="confirmPassword"
+            type="password"
+            formControlName="confirmPassword"
+          />
+          <small class="error"
+                 *ngIf="f['confirmPassword'].touched && f['confirmPassword'].hasError('required')">
+            Debes confirmar la contraseña.
+          </small>
+          <small class="error"
+                 *ngIf="f['confirmPassword'].touched && f['confirmPassword'].hasError('mismatch')">
+            Las contraseñas no coinciden.
+          </small>
+        </div>
+      </div>
+
+      <!-- Botón exclusivo para “Guardar Cuenta” -->
+      <div class="buttons">
+        <button
+          type="button"
+          (click)="saveCuenta()"
+          [disabled]="
+            // Deshabilitar si correoUsuario no es válido
+            f['correoUsuario'].invalid ||
+            // Si el usuario activó cambio de contraseña, asegurar que contraseña y confirm pasen validación
+            (showPasswordFields &&
+              (f['claveUsrio'].invalid || f['confirmPassword'].invalid))
+          "
+        >
+          Guardar Cuenta
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,98 @@
+<!-- src/app/usuario/pse/pse.component.html -->
+<div class="pse-page">
+  <!-- 1) BANNER SUPERIOR -->
+  <div class="header-banner">
+    <img src="assets/images/banner.jpeg" alt="Banner PSE" />
+  </div>
+
+  <!-- 2) CONTENIDO PRINCIPAL -->
+  <div class="pse-content" [class.blur]="isLoading">
+    <div class="pse-card">
+      <h2>Pago por PSE</h2>
+
+      <div class="info-line">
+        <strong>Transacción:</strong> {{ transactionId }}
+      </div>
+      <div class="info-line">
+        <strong>Usuario (correo):</strong> {{ userEmail }}
+      </div>
+
+      <div class="pse-form">
+        <!-- 1) Tipo de Cliente con placeholder -->
+        <div class="field">
+          <label for="tipoCliente">Tipo de Cliente:</label>
+          <select
+            id="tipoCliente"
+            [(ngModel)]="tipoCliente"
+            name="tipoCliente"
+            class="field-select"
+            [disabled]="isLoading">
+            <!-- Placeholder deshabilitado -->
+            <option value="" disabled selected>-- Seleccione Tipo de Cliente --</option>
+            <option *ngFor="let tipo of listaTiposCliente" [value]="tipo">
+              {{ tipo }}
+            </option>
+          </select>
+        </div>
+
+        <!-- 2) Identificación -->
+        <div class="field">
+          <label for="identificacion">Identificación:</label>
+          <input
+            id="identificacion"
+            type="text"
+            [(ngModel)]="identificacionCliente"
+            name="identificacion"
+            class="field-input"
+            placeholder="Ingrese su número de cédula / NIT"
+            [disabled]="isLoading" />
+        </div>
+
+        <!-- 3) Selección de Banco -->
+        <div class="field">
+          <label for="banco">Elige tu Banco:</label>
+          <select
+            id="banco"
+            [(ngModel)]="bancoSeleccionado"
+            name="banco"
+            class="field-select"
+            [disabled]="isLoading">
+            <option value="" disabled selected>-- Seleccione un banco --</option>
+            <option *ngFor="let b of bancosDisponibles" [value]="b">{{ b }}</option>
+          </select>
+        </div>
+
+        <!-- 4) Botones -->
+        <button
+          class="pse-btn"
+          (click)="payViaPSE()"
+          [disabled]="isLoading">
+          Continuar con PSE
+        </button>
+
+        <button
+          class="cancel-btn"
+          (click)="cancelar()"
+          [disabled]="isLoading">
+          Regresar al carrito
+        </button>
+      </div>
+    </div>
+
+    <!-- Tarjeta de info adicional -->
+    <div class="info-card">
+      <img src="assets/images/info.jpeg" alt="Para mayor información" />
+    </div>
+  </div>
+
+  <!-- 3) FOOTER BANNER -->
+  <div class="footer-banner">
+    <img src="assets/images/footer.jpeg" alt="Footer" />
+  </div>
+
+  <!-- 4) SPINNER OVERLAY -->
+  <div class="spinner-overlay" *ngIf="isLoading">
+    <img src="assets/images/ach_logo.png" alt="ACH Logo" class="spinner-img" />
+    <p>Cargando transacción PSE…</p>
+  </div>
+</div>

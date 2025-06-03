@@ -1,0 +1,114 @@
+<div class="carrito-page">
+  <div class="overlay"></div>
+
+  <div class="carrito-card">
+    <h2>Tu Carrito de Compras</h2>
+    <div *ngIf="cartItems.length === 0" class="empty-msg">
+      Tu carrito está vacío.
+    </div>
+    <div *ngIf="cartItems.length > 0" class="items-list">
+      <div *ngFor="let item of cartItems; let i = index" class="item-row">
+        <div class="item-photo">
+          <img [src]="'assets/images/' + item.product.fotoProducto" [alt]="item.product.descripcion" />
+        </div>
+        <div class="item-info">
+          <div class="desc">{{ item.product.descripcion }}</div>
+          <div class="meta">
+            <span class="tipo">
+              {{ (item.product.idCategoria === 1) ? 'Vinilo (inglés)'
+                 : (item.product.idCategoria === 2) ? 'Vinilo (español)'
+                 : (item.product.idCategoria === 3) ? 'CD (inglés)'
+                 : (item.product.idCategoria === 4) ? 'CD (español)' : 'Producto' }}
+            </span>
+            &nbsp;–&nbsp;
+            <span class="ref">{{ item.product.referencia }}</span>
+          </div>
+          <div class="precio">
+            Precio unitario:
+            <strong>{{ item.product.precioVentaActual | currency:'COP':'symbol' }}</strong>
+          </div>
+          <div class="existencia">
+            Existencias: {{ item.product.existencia }}
+          </div>
+        </div>
+        <div class="item-qty">
+          <button (click)="decrementItem(i)">−</button>
+          <span class="qty">{{ item.quantity }}</span>
+          <button (click)="incrementItem(i)">+</button>
+        </div>
+        <div class="item-subtotal">
+          <strong>{{ (item.product.precioVentaActual * item.quantity) | currency:'COP':'symbol' }}</strong>
+        </div>
+        <div class="item-remove">
+          <button class="remove-btn" (click)="removeItem(i)">✖</button>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="cartItems.length > 0" class="summary">
+      <div class="line">
+        <span>Subtotal:</span> <span>{{ subtotal | currency:'COP':'symbol' }}</span>
+      </div>
+      <div class="line">
+        <span>IVA ({{ ivaPercent }}%):</span> <span>{{ totalIva | currency:'COP':'symbol' }}</span>
+      </div>
+      <div class="line" *ngIf="discountPercent > 0">
+        <span>Descuento ({{ discountPercent }}%):</span>
+        <span>- {{ discountAmount | currency:'COP':'symbol' }}</span>
+      </div>
+      <div class="line total">
+        <span>Total a Pagar:</span> <span>{{ totalFinal | currency:'COP':'symbol' }}</span>
+      </div>
+    </div>
+    <div class="buttons">
+      <button class="back-btn" (click)="goBack()">Regresar</button>
+      <button class="pay-btn" (click)="openShipping()" [disabled]="cartItems.length === 0">Pagar</button>
+    </div>
+  </div>
+
+  <!-- Modal Shipping (solo se muestra si showShipping es true) -->
+  <div class="shipping-modal" *ngIf="showShipping">
+    <div class="shipping-modal-content">
+      <h3>Datos de envío y pago</h3>
+      <form [formGroup]="shippingForm" (ngSubmit)="submitShipping()">
+        <div class="field">
+          <label>Nombre completo</label>
+          <input type="text" formControlName="nombreCliente" placeholder="Nombre completo" />
+        </div>
+        <div class="field">
+          <label>Dirección</label>
+          <input type="text" formControlName="direccionCliente" placeholder="Dirección" />
+        </div>
+        <div class="field">
+          <label>Correo electrónico</label>
+          <input type="email" formControlName="correoCliente" placeholder="Correo electrónico" />
+        </div>
+        <div class="field">
+          <label>Teléfono</label>
+          <input type="tel" formControlName="telefono" placeholder="Teléfono" />
+        </div>
+        <div class="field payment-choice">
+          <label>Método de pago:</label>
+          <ng-container *ngIf="metodosPago && metodosPago.length > 0; else noMetodos">
+            <label *ngFor="let metodo of metodosPago" class="radio-label">
+              <input
+                type="radio"
+                formControlName="metodoPago"
+                [value]="metodo.id"
+                [checked]="shippingForm.value.metodoPago === metodo.id"
+              />
+              {{ metodo.descripcion }}
+            </label>
+          </ng-container>
+          <ng-template #noMetodos>
+            <span class="no-metodos">No hay métodos de pago disponibles.</span>
+          </ng-template>
+        </div>
+        <button type="submit" [disabled]="shippingForm.invalid || loading">
+          {{ loading ? 'Procesando…' : 'Pagar ahora' }}
+        </button>
+        <button type="button" class="cancel-btn" (click)="closeShippingModal()" [disabled]="loading">Cancelar</button>
+      </form>
+    </div>
+  </div>
+</div>

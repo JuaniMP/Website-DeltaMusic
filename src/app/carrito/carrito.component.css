@@ -1,0 +1,300 @@
+/* CONTENEDOR OSCURO Y TARJETA CENTRADA */
+.carrito-page {
+  position: relative;
+  min-height: 100vh;
+  background: #111;
+  overflow: hidden;
+}
+.carrito-page .overlay {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.8);
+  z-index: 0;
+}
+.carrito-card {
+  position: relative;
+  z-index: 1;
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 2rem 2.5rem;
+  background: #222;
+  border-radius: 16px;
+  box-shadow: 0 4px 22px rgba(0,0,0,0.7);
+  color: #eee;
+  font-family: Arial, sans-serif;
+}
+.carrito-card h2 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  font-size: 1.8rem;
+  color: #ffeac2;
+}
+.empty-msg {
+  text-align: center;
+  color: #ccc;
+  font-size: 1.1rem;
+  padding: 1.5rem 0;
+}
+.items-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+.item-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: #25221b;
+  border-radius: 7px;
+  padding: 0.8rem;
+}
+.item-photo img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+.item-info {
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+.item-info .desc {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #ffe4b3;
+}
+.item-info .meta {
+  font-size: 0.9rem;
+  color: #bbb;
+}
+.item-info .precio,
+.item-info .existencia {
+  font-size: 0.9rem;
+  color: #fff;
+}
+.item-qty {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.item-qty button {
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: 4px;
+  background: #D2691E;
+  color: #fff;
+  cursor: pointer;
+  font-size: 1.1rem;
+  transition: background 0.2s;
+}
+.item-qty button:hover {
+  background: #993d08;
+}
+.item-qty .qty {
+  width: 24px;
+  text-align: center;
+  color: #fff;
+  font-size: 1rem;
+}
+.item-subtotal {
+  flex: 1;
+  text-align: center;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #f5e8c7;
+}
+.item-remove button {
+  background: #b12f2f;
+  border: none;
+  color: #fff;
+  border-radius: 4px;
+  width: 28px;
+  height: 28px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.item-remove button:hover {
+  background: #7f1e1e;
+}
+.summary {
+  margin-bottom: 1.5rem;
+  max-width: 400px;
+  margin-left: auto;
+}
+.summary .line {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.4rem 0;
+  font-size: 1rem;
+  color: #fff;
+}
+.summary .total {
+  margin-top: 0.75rem;
+  border-top: 1px solid #444;
+  padding-top: 0.75rem;
+  font-weight: bold;
+  color: #ffe4b3;
+}
+.buttons {
+  display: flex;
+  gap: 1rem;
+}
+.back-btn,
+.pay-btn {
+  flex: 1;
+  padding: 0.8rem;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s, opacity 0.2s;
+}
+.back-btn {
+  background: #444;
+  color: #ffeac2;
+}
+.back-btn:hover {
+  background: #555;
+}
+.pay-btn {
+  background: #d2691e;
+  color: #fff;
+}
+.pay-btn:hover:not([disabled]) {
+  background: #a0522d;
+}
+.pay-btn[disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* MODAL SHIPPING */
+.shipping-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 99;
+  background: rgba(10,10,10,0.82);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  backdrop-filter: blur(2px);
+  animation: fadeIn 0.16s;
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+.shipping-modal-content {
+  min-width: 320px;
+  max-width: 410px;
+  width: 97vw;
+  background: rgba(33,29,21,0.95);
+  border-radius: 20px;
+  padding: 2.3rem 2rem 2rem 2rem;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.68);
+  color: #ffe9c2;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  animation: modalIn .18s cubic-bezier(.24,.96,.65,1.05);
+}
+@keyframes modalIn {
+  from { opacity: 0; transform: translateY(30px) scale(.94);}
+  to   { opacity: 1; transform: translateY(0) scale(1);}
+}
+.shipping-modal-content h3 {
+  font-size: 1.55rem;
+  color: #ffeac2;
+  margin-bottom: 1.3rem;
+  text-align: center;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+}
+.field {
+  margin-bottom: 1.13rem;
+  display: flex;
+  flex-direction: column;
+}
+.field label {
+  color: #ffe4b3;
+  margin-bottom: 0.23rem;
+  font-size: 1.03rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.32rem;
+}
+.field input[type="text"],
+.field input[type="email"],
+.field input[type="tel"] {
+  border: 1.7px solid #b08968;
+  border-radius: 7px;
+  padding: .62rem .88rem;
+  font-size: 1.12rem;
+  color: #2a2312;
+  background: #fffbe8;
+  transition: border .2s;
+}
+.field input:focus {
+  border-color: #d2691e;
+  outline: none;
+}
+.payment-choice {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: 0.8rem;
+}
+.radio-label {
+  color: #ffe4b3;
+  margin-right: 1.1rem;
+  font-size: 1rem;
+}
+button[type="submit"] {
+  margin-top: 0.5rem;
+  width: 100%;
+  padding: .9rem;
+  border-radius: 8px;
+  background: linear-gradient(90deg, #d2691e 0%, #a0522d 100%);
+  color: #fff8e1;
+  font-weight: bold;
+  font-size: 1.17rem;
+  border: none;
+  cursor: pointer;
+  transition: background 0.17s;
+  box-shadow: 0 1px 7px rgba(0,0,0,0.13);
+}
+button[type="submit"]:not(:disabled):hover {
+  background: linear-gradient(90deg, #a0522d 0%, #d2691e 100%);
+}
+button.cancel-btn {
+  background: #4a4642;
+  color: #ffe9c2;
+  font-size: 1.05rem;
+  font-weight: normal;
+  margin-top: .7rem;
+  border: none;
+  border-radius: 8px;
+  width: 100%;
+  padding: .9rem;
+  cursor: pointer;
+  transition: background 0.14s;
+}
+button.cancel-btn:not(:disabled):hover {
+  background: #393733;
+}
+input[type="radio"] {
+  accent-color: #d2691e;
+}
+@media (max-width: 500px) {
+  .shipping-modal-content {
+    padding: 1.2rem 0.5rem;
+    min-width: 0;
+  }
+}
