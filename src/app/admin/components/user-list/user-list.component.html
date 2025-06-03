@@ -1,31 +1,41 @@
 <div class="user-list-wrapper">
-  <h2>LISTA DE CLIENTES</h2>
+  <h2>LISTA DE USUARIOS</h2>
   <table class="user-list-table">
     <thead>
       <tr>
         <th>Correo</th>
-        <th># de compras</th>
+        <th>Tipo</th>
+        <th>Estado</th>
+        <th>Fecha Última Clave</th>
+        <th>Intentos</th>
         <th>Acciones</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngIf="!users?.length">
-        <td colspan="3" class="empty">No hay usuarios registrados.</td>
+        <td colspan="6" class="empty">No hay usuarios registrados.</td>
       </tr>
       <tr *ngFor="let user of users">
         <td>{{ user.correoUsuario }}</td>
-        <td class="count">{{ user.comprasCount || 0 }}</td>
+        <td class="count">{{ getTipoUsuario(user.idTipoUsuario ?? '') }}</td>
+        <td class="count">
+          <span [ngClass]="user.estado === 1 ? 'active' : 'inactive'">
+            {{ user.estado === 1 ? 'Activo' : 'Inactivo' }}
+          </span>
+        </td>
+        <td class="count">{{ user.fchaUltmaClave | date:'short' }}</td>
+        <td class="count">{{ user.intentos }}</td>
         <td class="actions">
-          <!-- Actualizar (editar) -->
+          <!-- Editar -->
           <button (click)="editUser(user)" title="Editar usuario">
             <i class="fas fa-edit"></i>
           </button>
-          <!-- Activar / Desactivar -->
+          <!-- Activar / Desactivar (colores invertidos) -->
           <button
             (click)="toggleActive(user)"
-            [title]="user.estado ? 'Desactivar' : 'Activar'"
-            [ngClass]="user.estado ? 'btn-block' : 'btn-activate'">
-            <i class="fas" [ngClass]="user.estado ? 'fa-user-lock' : 'fa-user-check'"></i>
+            [title]="user.estado === 1 ? 'Desactivar' : 'Activar'"
+            [ngClass]="user.estado === 1 ? 'btn-activate' : 'btn-block'">
+            <i class="fas" [ngClass]="user.estado === 1 ? 'fa-user-lock' : 'fa-user-check'"></i>
           </button>
         </td>
       </tr>

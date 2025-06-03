@@ -1,0 +1,46 @@
+<div class="user-list-wrapper">
+  <div class="table-title">GESTIÓN DE PARÁMETROS</div>
+  <table class="user-list-table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Descripción</th>
+        <th>Valor Numérico</th>
+        <th>Valor Texto</th>
+        <th>Fecha Inicial</th>
+        <th>Fecha Final</th>
+        <th>Estado</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngIf="!parametros?.length">
+        <td colspan="8" class="empty">No hay parámetros registrados.</td>
+      </tr>
+      <tr *ngFor="let p of parametros">
+        <td class="count">{{ p.id }}</td>
+        <td>{{ p.descripcion }}</td>
+        <td>{{ p.valorNumero || '-' }}</td>
+        <td>{{ p.valorTexto || '-' }}</td>
+        <td>{{ p.fechaInicial ? (p.fechaInicial | date:'yyyy-MM-dd') : '-' }}</td>
+        <td>{{ p.fechaFinal ? (p.fechaFinal | date:'yyyy-MM-dd') : '-' }}</td>
+        <td class="count">
+          <span [ngClass]="p.estado === 1 ? 'active' : 'inactive'">
+            {{ p.estado === 1 ? 'Activo' : 'Inactivo' }}
+          </span>
+        </td>
+        <td class="actions">
+          <button (click)="deleteParametro(p.id)" title="Borrar">
+            <i class="fas fa-trash-alt"></i>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <footer class="content-footer">
+    <button (click)="irCrearParametro()">
+      <i class="fas fa-plus-circle"></i>
+      Crear nuevo parámetro
+    </button>
+  </footer>
+</div>

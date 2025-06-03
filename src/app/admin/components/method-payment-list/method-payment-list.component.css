@@ -1,0 +1,117 @@
+.user-list-wrapper {
+  flex: 1;
+  overflow-x: auto;
+  padding: 1rem 2rem;
+  background: #222;
+}
+
+.table-title {
+  margin: 0 0 1rem;
+  font-family: 'Cinzel', serif;
+  color: #f5e8c7;
+  font-size: 1.5rem;
+}
+
+.user-list-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.user-list-table thead th {
+  padding: 0.75rem;
+  background: #3a3a3a;
+  color: #ddd;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+  letter-spacing: 1px;
+}
+
+.user-list-table tbody tr {
+  border-bottom: 1px solid #444;
+}
+
+.user-list-table tbody td {
+  padding: 0.75rem;
+  background: #2a2a2a;
+  color: #ddd;
+}
+
+.user-list-table td.count {
+  text-align: center;
+}
+
+.user-list-table .empty {
+  text-align: center;
+  padding: 1.5rem;
+  color: #777;
+}
+
+.user-list-table td.actions {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.user-list-table td.actions button {
+  background: #444;
+  border: none;
+  padding: 0.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.user-list-table td.actions button.btn-block {
+  background: #e74c3c; /* rojo */
+}
+.user-list-table td.actions button.btn-block:hover {
+  background: #c0392b;
+}
+
+.user-list-table td.actions button:hover {
+  background: #555;
+}
+
+.user-list-table td.actions i {
+  color: #ccc;
+  font-size: 1rem;
+}
+
+.user-list-table td.actions button:hover i {
+  color: #fff;
+}
+
+.user-list-table td.count .active {
+  color: #4caf50;
+}
+.user-list-table td.count .inactive {
+  color: #f44336;
+}
+
+.content-footer {
+  text-align: center;
+  padding: 1rem;
+  background: #181818;
+  border-top: 1px solid #333;
+}
+
+.content-footer button {
+  background: #27ae60;
+  color: #fff;
+  border: none;
+  padding: 0.65rem 1.5rem;
+  font-size: 1.1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  font-weight: 500;
+  transition: background 0.18s;
+}
+.content-footer button:hover {
+  background: #219150;
+}
+.content-footer button i {
+  font-size: 1.25rem;
+}

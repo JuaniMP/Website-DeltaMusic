@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { UserService } from '../../services/user.service';
 import { User } from '../../models/user.model';
-import { NotificationService } from '../../../shared/notification.service'; // Ajusta la ruta si es diferente
+import { NotificationService } from '../../../shared/notification.service';
 
 @Component({
   selector: 'app-user-list',
@@ -17,7 +17,7 @@ export class UserListComponent implements OnInit {
 
   constructor(
     private userService: UserService,
-    private notify: NotificationService, // <--- AÑADE EL SERVICIO
+    private notify: NotificationService,
     private router: Router
   ) {}
 
@@ -31,6 +31,15 @@ export class UserListComponent implements OnInit {
       error: (err: any) => console.error('Error cargando usuarios', err)
     });
   }
+
+  getTipoUsuario(id: string | number): string {
+  const val = (id ?? '').toString().toUpperCase().trim();
+  if (val === 'U' || val === '1') return 'Usuario';
+  if (val === 'A' || val === '2') return 'Admin';
+  // Agrega más casos si llega a haber otros tipos
+  return 'Otro';
+}
+
 
   /** Redirige al formulario de edición */
   editUser(user: User): void {

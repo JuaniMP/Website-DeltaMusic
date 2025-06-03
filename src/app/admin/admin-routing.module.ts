@@ -8,6 +8,13 @@ import { AuditListComponent }   from './components/audit-list/audit-list.compone
 import { ProductListComponent } from './components/product-list/product-list.component';
 import { CreateProductComponent } from './components/create-product/create-product.component';
 import { TransactionListComponent } from './components/transaction-list/transaction-list.component';
+import { MethodPaymentListComponent } from './components/method-payment-list/method-payment-list.component';
+import { ParametroListComponent } from './components/parametro-list/parametro-list.component';
+import { StatisticsListComponent } from './components/statistics-list/statistics-list.component';
+import { CreateMethodPaymentComponent } from './components/create-method-payment/create-method-payment.component';
+import { CreateParametroComponent } from './components/create-parametro/create-parametro.component';
+
+
 import { RoleGuard }            from '../auth/role.guard';
 
 const routes: Routes = [
@@ -36,6 +43,11 @@ const routes: Routes = [
       { path: 'audit',     component: AuditListComponent },
 
       { path: 'transactions', component: TransactionListComponent },
+       { path: 'method-payments', component: MethodPaymentListComponent },
+       { path: 'method-payments/new', component: CreateMethodPaymentComponent },
+      { path: 'parametros', component: ParametroListComponent },
+      { path: 'parametros/new', component: CreateParametroComponent },
+      { path: 'stats', component: StatisticsListComponent },
 
       // Ruta comodín: redirige al listado de usuarios
       { path: '**',        redirectTo: 'users' }

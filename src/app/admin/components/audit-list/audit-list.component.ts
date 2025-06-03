@@ -20,21 +20,24 @@ export class AuditListComponent implements OnInit {
   constructor(private svc: AuditoriaService) {}
 
   ngOnInit(): void {
-    this.svc.getAll().subscribe({
-      next: data => {
-        this.audits = data;
-        this.filtered = data;
-      },
-      error: err => console.error('Error cargando auditoría', err)
-    });
-  }
+  this.svc.getAll().subscribe({
+    next: data => {
+      // Ordena descendente por fecha (de más reciente a más antigua)
+      this.audits = data.sort((a, b) => new Date(b.fchaAudtria).getTime() - new Date(a.fchaAudtria).getTime());
+      this.filtered = [...this.audits];
+    },
+    error: err => console.error('Error cargando auditoría', err)
+  });
+}
 
-  applyFilter(): void {
-    const term = this.filterText.toLowerCase();
-    this.filtered = this.audits.filter(a =>
-      a.usrioAudtria.toLowerCase().includes(term) ||
-      a.tablaAccion.toLowerCase().includes(term) ||
-      a.accionAudtria.toLowerCase().includes(term)
-    );
-  }
+
+ applyFilter(): void {
+  const term = this.filterText.toLowerCase();
+  this.filtered = this.audits.filter(a =>
+    a.usrioAudtria.toLowerCase().includes(term) ||
+    a.tablaAccion.toLowerCase().includes(term) ||
+    a.accionAudtria.toLowerCase().includes(term)
+  );
+  // El array ya viene ordenado, no hace falta volver a ordenar aquí.
+}
 }

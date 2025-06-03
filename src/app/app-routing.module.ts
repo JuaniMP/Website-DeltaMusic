@@ -8,6 +8,7 @@ import { RegisterComponent } from './auth/register/register.component';
 import { ForgotComponent }   from './auth/forgot/forgot.component';
 import { CarritoComponent } from './carrito/carrito.component';
 
+
 // demás:
 import { NotFoundComponent } from './common/not-found.component';
 import { AuthRedirectGuard } from './auth/auth-redirect.guard';

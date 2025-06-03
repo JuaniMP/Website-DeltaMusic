@@ -18,9 +18,15 @@ export class TransactionListComponent implements OnInit {
   constructor(private svc: TransactionService) {}
 
   ngOnInit(): void {
-    this.svc.getAll().subscribe({
-      next: data => this.transactions = data,
-      error: err => console.error('Error cargando transacciones', err)
-    });
-  }
+  this.svc.getAll().subscribe({
+    next: data => {
+      // Ordena descendente por fecha/hora (de más reciente a más antigua)
+      this.transactions = data.sort(
+        (a, b) => new Date(b.fechaHora).getTime() - new Date(a.fechaHora).getTime());
+
+    },
+    error: err => console.error('Error cargando transacciones', err)
+  });
+}
+
 }

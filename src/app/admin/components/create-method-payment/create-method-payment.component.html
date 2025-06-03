@@ -1,0 +1,21 @@
+<div class="create-method-wrapper">
+  <h3>Crear nuevo método de pago</h3>
+  <form #form="ngForm" (ngSubmit)="guardarMetodo()">
+    <div class="form-group">
+      <label>Descripción:</label>
+      <input type="text" [(ngModel)]="metodo.descripcion" name="descripcion" required autocomplete="off" />
+    </div>
+    <div class="form-group">
+      <label>Estado:</label>
+      <select [(ngModel)]="metodo.estado" name="estado" required>
+        <option [value]="1">Activo</option>
+        <option [value]="0">Inactivo</option>
+      </select>
+    </div>
+    <div class="form-btns">
+      <button type="submit" [disabled]="form.invalid">Guardar</button>
+      <a class="cancel" routerLink="/admin/method-payments">Cancelar</a>
+    </div>
+    <div *ngIf="mensaje" class="mensaje">{{ mensaje }}</div>
+  </form>
+</div>

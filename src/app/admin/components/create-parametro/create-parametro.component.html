@@ -1,0 +1,37 @@
+<div class="create-parametro-wrapper">
+  <h3>Crear nuevo parámetro</h3>
+  <form (ngSubmit)="guardarParametro()">
+    <div class="form-group">
+      <label>Descripción:</label>
+      <input type="text" [(ngModel)]="parametro.descripcion" name="descripcion" required autocomplete="off" />
+    </div>
+    <div class="form-group">
+      <label>Valor numérico:</label>
+      <input type="number" [(ngModel)]="parametro.valor_numero" name="valor_numero" />
+    </div>
+    <div class="form-group">
+      <label>Valor texto:</label>
+      <input type="text" [(ngModel)]="parametro.valor_texto" name="valor_texto" />
+    </div>
+    <div class="form-group">
+      <label>Fecha inicial:</label>
+      <input type="date" [(ngModel)]="parametro.fecha_inicial" name="fecha_inicial" />
+    </div>
+    <div class="form-group">
+      <label>Fecha final:</label>
+      <input type="date" [(ngModel)]="parametro.fecha_final" name="fecha_final" />
+    </div>
+    <div class="form-group">
+      <label>Estado:</label>
+      <select [(ngModel)]="parametro.estado" name="estado" required>
+        <option [value]="1">Activo</option>
+        <option [value]="0">Inactivo</option>
+      </select>
+    </div>
+    <div class="form-btns">
+      <button type="submit">Guardar</button>
+      <a class="cancel" [routerLink]="['/admin/parametros']">Cancelar</a>
+    </div>
+    <div *ngIf="mensaje" class="mensaje">{{ mensaje }}</div>
+  </form>
+</div>

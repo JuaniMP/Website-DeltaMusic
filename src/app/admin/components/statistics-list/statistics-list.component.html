@@ -1,1 +1,62 @@
-<p>statistics-list works!</p>
+<div class="stats-wrapper">
+  <h2>Estadísticas</h2>
+
+  <div class="top-bar">
+    <div class="select-container">
+      <label for="selectStat">Selecciona una estadística:</label>
+      <select id="selectStat" [(ngModel)]="selectedStat" (change)="loadSelectedStat()">
+        <option *ngFor="let op of statOptions" [value]="op.key">{{ op.label }}</option>
+      </select>
+    </div>
+    <div class="buttons">
+      <button (click)="downloadPdf()">
+        <i class="fas fa-file-pdf"></i> PDF
+      </button>
+      <button (click)="downloadExcel()">
+        <i class="fas fa-file-excel"></i> Excel
+      </button>
+    </div>
+  </div>
+
+  <!-- Aquí se añade la gráfica si hay datos -->
+  <div class="charts-container" *ngIf="chartData">
+    <canvas
+      baseChart
+      [data]="chartData"
+      [type]="chartType"
+      [options]="chartOptions">
+    </canvas>
+  </div>
+
+  <div class="stats-result" *ngIf="statResult">
+    <ng-container [ngSwitch]="selectedStat">
+      <div *ngSwitchCase="'usuarios'">
+        <h3>Total de usuarios activos: <span>{{ statResult.totalActivos }}</span></h3>
+        <h4>Total usuarios inactivos: <span>{{ statResult.totalInactivos }}</span></h4>
+        <h4>Total usuarios: <span>{{ statResult.total }}</span></h4>
+      </div>
+      <div *ngSwitchCase="'productos'">
+        <h3>Total productos: <span>{{ statResult.total }}</span></h3>
+        <h4>Activos: <span>{{ statResult.activos }}</span> | Inactivos: <span>{{ statResult.inactivos }}</span></h4>
+      </div>
+      <div *ngSwitchCase="'transacciones'">
+        <h3>Total transacciones: <span>{{ statResult.total }}</span></h3>
+        <h4>Activas: <span>{{ statResult.activas }}</span> | Anuladas: <span>{{ statResult.anuladas }}</span></h4>
+      </div>
+      <div *ngSwitchCase="'metodosPago'">
+        <h3>Métodos de pago activos: <span>{{ statResult.activos }}</span></h3>
+        <h4>Total métodos: <span>{{ statResult.total }}</span></h4>
+      </div>
+      <div *ngSwitchCase="'parametros'">
+        <h3>Parámetros activos: <span>{{ statResult.activos }}</span></h3>
+        <h4>Total parámetros: <span>{{ statResult.total }}</span></h4>
+      </div>
+      <div *ngSwitchCase="'auditoria'">
+        <h3>Registros de auditoría: <span>{{ statResult.total }}</span></h3>
+      </div>
+      <div *ngSwitchDefault>
+        <em>Selecciona una estadística...</em>
+      </div>
+    </ng-container>
+  </div>
+</div>

@@ -1,0 +1,40 @@
+<div class="user-list-wrapper">
+  <div class="table-title">GESTIÓN DE MÉTODOS DE PAGO</div>
+  <table class="user-list-table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Descripción</th>
+        <th>Estado</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngIf="!metodos?.length">
+        <td colspan="4" class="empty">No hay métodos registrados.</td>
+      </tr>
+      <tr *ngFor="let m of metodos">
+        <td class="count">{{ m.id }}</td>
+        <td>{{ m.descripcion }}</td>
+        <td class="count">
+          <span [ngClass]="m.estado === 1 ? 'active' : 'inactive'">
+            {{ m.estado === 1 ? 'Activo' : 'Inactivo' }}
+          </span>
+        </td>
+        <td class="actions">
+          <button (click)="deleteMetodo(m.id)" title="Borrar">
+            <i class="fas fa-trash-alt"></i>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <footer class="content-footer">
+    <a routerLink="new" class="btn-create-method">
+      <i class="fas fa-plus-circle"></i>
+      Crear nuevo método de pago
+    </a>
+  </footer>
+</div>
+
+

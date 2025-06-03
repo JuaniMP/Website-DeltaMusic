@@ -1,26 +1,46 @@
-<!-- src/app/admin/components/product-list/product-list.component.html -->
 <div class="user-list-wrapper">
   <h2 class="table-title">GESTIÓN DE PRODUCTOS</h2>
   <table class="user-list-table">
     <thead>
       <tr>
+        <th>ID</th>
+        <th>Categoría</th>
         <th>Referencia</th>
         <th>Descripción</th>
-        <th>Precio</th>
         <th>Existencia</th>
+        <th>Stock Máximo</th>
+        <th>Precio Actual</th>
+        <th>Precio Anterior</th>
+        <th>Costo Compra</th>
+        <th>IVA</th>
+        <th>Foto</th>
         <th>Estado</th>
         <th>Acciones</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngIf="!productos?.length">
-        <td colspan="6" class="empty">No hay productos registrados.</td>
+        <td colspan="13" class="empty">No hay productos registrados.</td>
       </tr>
       <tr *ngFor="let prod of productos">
+        <td class="count">{{ prod.id }}</td>
+        <td class="count">{{ prod.idCategoria }}</td>
         <td>{{ prod.referencia }}</td>
         <td>{{ prod.descripcion }}</td>
-        <td class="count">{{ prod.precioVentaActual | currency:'COP':'symbol' }}</td>
         <td class="count">{{ prod.existencia }}</td>
+        <td class="count">{{ prod.stockMaximo }}</td>
+        <td class="count">{{ prod.precioVentaActual | currency:'COP':'symbol' }}</td>
+        <td class="count">{{ prod.precioVentaAnterior | currency:'COP':'symbol' }}</td>
+        <td class="count">{{ prod.costoCompra | currency:'COP':'symbol' }}</td>
+        <td class="count">
+          <span [ngClass]="prod.tieneIva === 1 ? 'active' : 'inactive'">
+            {{ prod.tieneIva === 1 ? 'Sí' : 'No' }}
+          </span>
+        </td>
+        
+         <td>{{ prod.fotoProducto }}</td>
+
+        
         <td class="count">
           <span [ngClass]="prod.estado === 1 ? 'active' : 'inactive'">
             {{ prod.estado === 1 ? 'Activo' : 'Inactivo' }}
@@ -44,7 +64,6 @@
     </tbody>
   </table>
 
-  <!-- Enlace para Crear Producto -->
   <footer class="content-footer">
     <a [routerLink]="['/admin/products/new']" class="create-link">
       CREAR PRODUCTO
