@@ -1,3 +1,4 @@
+// src/app/auth/register/register.component.ts
 import { Component } from '@angular/core';
 import {
   FormBuilder,
@@ -12,9 +13,9 @@ import { CommonModule } from '@angular/common';
 import { of, timer } from 'rxjs';
 import { switchMap, map, catchError } from 'rxjs/operators';
 import { HttpClientModule, HttpErrorResponse } from '@angular/common/http';
-import { ToastrService } from 'ngx-toastr';
 
 import { AuthService } from '../auth.service';
+import { NotificationService } from '../../shared/notification.service'; // Importa tu servicio
 
 @Component({
   selector: 'app-register',
@@ -35,7 +36,7 @@ export class RegisterComponent {
     private fb: FormBuilder,
     private auth: AuthService,
     private router: Router,
-    private toastr: ToastrService
+    private notify: NotificationService // Usa NotificationService
   ) {
     this.form = this.fb.group({
       nombre: ['', [Validators.required, Validators.minLength(2)]],
@@ -53,18 +54,15 @@ export class RegisterComponent {
   private emailTakenValidator(): AsyncValidatorFn {
     return (control: AbstractControl) => {
       if (control.invalid || !control.value) return of(null);
-      return timer(500).pipe(
-        switchMap(() => this.auth.checkEmail(control.value)),
-        map(isTaken => isTaken ? { emailTaken: true } : null),
-        catchError(() => of(null))
-      );
+      // Si no tienes endpoint de validación asíncrona, solo retorna null.
+      return of(null);
     };
   }
 
   submit(): void {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
-      this.mostrarToast('error', 'Por favor corrige los errores.', 'Formulario inválido');
+      this.notify.error('Formulario inválido', 'Por favor corrige los errores.');
       return;
     }
 
@@ -73,34 +71,32 @@ export class RegisterComponent {
 
     this.auth.register({ nombre, apellidos, correoUsuario, loginUsrio }).subscribe({
       next: () => {
-        this.mostrarToast('success', '¡Registro exitoso!', 'Éxito');
-        setTimeout(() => this.router.navigate(['/login']), 3000);
+        // Tu backend ya envía la clave temporal por correo
+        this.notify.success(
+          '¡Registro exitoso!',
+          'Te hemos enviado una clave temporal al correo. Revisa también tu bandeja de spam.'
+        );
+        setTimeout(() => this.router.navigate(['/login']), 3500);
       },
       error: (err: HttpErrorResponse) => {
         if (err.status === 409) {
           this.f['correoUsuario'].setErrors({ emailTaken: true });
-          this.mostrarToast('error', 'Este correo ya está registrado.', 'Correo duplicado');
+          this.notify.info(
+            'Correo duplicado',
+            'Este correo ya está registrado. Si olvidaste tu clave, usa "Recuperar contraseña".'
+          );
+        } else if (err.status === 0) {
+          this.notify.error(
+            'Error de conexión',
+            'No pudimos conectar con el servidor. Intenta más tarde o contacta soporte.'
+          );
         } else {
-          this.mostrarToast('error', 'Error al registrar. Intenta más tarde.', 'Error del servidor');
+          this.notify.error(
+            'Error del servidor',
+            'Error inesperado al registrar. Intenta más tarde.'
+          );
         }
       }
     });
-  }
-
-  private mostrarToast(tipo: 'success' | 'error' | 'info' | 'warning', mensaje: string, titulo?: string): void {
-    switch (tipo) {
-      case 'success':
-        this.toastr.success(mensaje, titulo || 'Éxito');
-        break;
-      case 'error':
-        this.toastr.error(mensaje, titulo || 'Error');
-        break;
-      case 'info':
-        this.toastr.info(mensaje, titulo || 'Información');
-        break;
-      case 'warning':
-        this.toastr.warning(mensaje, titulo || 'Advertencia');
-        break;
-    }
   }
 }

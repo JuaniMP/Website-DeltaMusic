@@ -235,7 +235,6 @@ export class CarritoComponent implements OnInit {
       headers: { Authorization: `Bearer ${token}` }
     }).subscribe({
       next: (clienteExistente) => {
-        // Siempre USA POST para actualizar/crear el cliente (deja que el backend decida si es update o insert)
         payloadCliente.id = clienteExistente.id;
         this.http.post<{ id: number }>('http://localhost:8181/cliente/saveCliente', payloadCliente, {
           headers: { Authorization: `Bearer ${token}` }
@@ -267,6 +266,10 @@ export class CarritoComponent implements OnInit {
       return;
     }
     const idMetodoPago = this.shippingForm.value.metodoPago;
+
+    // **GUARDAR el método de pago seleccionado en localStorage**
+    localStorage.setItem('metodoPagoId', String(idMetodoPago));
+
     const payload = {
       venta: {
         idCliente: clienteId,

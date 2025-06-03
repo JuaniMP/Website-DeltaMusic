@@ -15,6 +15,7 @@ import { ForgotComponent }           from './auth/forgot/forgot.component';
 import { CarritoComponent }       from './carrito/carrito.component';
 import { VinilosComponent }       from './usuario/vinilos/vinilos.component';
 import { CdsComponent }           from './usuario/cds/cds.component';
+import { FooterComponent } from './shared/footer/footer.component';
 
 // Other declarations
 import { NotFoundComponent }         from './common/not-found.component';
@@ -42,6 +43,7 @@ import { ToastrModule }              from 'ngx-toastr';
     CdsComponent,
     RegisterComponent,
     ForgotComponent,
+    FooterComponent,
     // Toast notifications
     ToastrModule.forRoot({
       positionClass: 'toast-top-right',

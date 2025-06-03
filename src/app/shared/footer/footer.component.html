@@ -1,0 +1,25 @@
+<footer class="footer">
+  <div *ngIf="empresa">
+    <div class="footer-row">
+      <strong>{{ empresa.razonSocial }}</strong>
+    </div>
+    <div class="footer-row">
+      <i class="fa fa-map-marker-alt"></i>
+      <span>{{ empresa.direccion }}</span>
+    </div>
+    <div class="footer-row">
+      <i class="fa fa-envelope"></i>
+      <span>{{ empresa.correoElectronico }}</span>
+    </div>
+    <div class="footer-row">
+      <i class="fa fa-phone"></i>
+      <span>{{ empresa.telefono }}</span>
+    </div>
+  </div>
+  <div *ngIf="!empresa && cargando">
+    <em>Cargando información de la empresa...</em>
+  </div>
+  <div *ngIf="!empresa && !cargando">
+    <em>No hay empresa disponible.</em>
+  </div>
+</footer>

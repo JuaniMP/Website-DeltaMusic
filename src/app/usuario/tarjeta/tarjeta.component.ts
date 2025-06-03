@@ -4,7 +4,7 @@ import {
   FormBuilder, FormGroup, Validators, ReactiveFormsModule,
   AbstractControl, ValidationErrors, ValidatorFn
 } from '@angular/forms';
-import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Router, RouterModule } from '@angular/router';
 import { NotificationService } from '../../shared/notification.service';
 
@@ -106,8 +106,8 @@ export class TarjetaComponent implements OnInit {
     };
   }
 
-  /** 
-   * Busca la transacción por venta. 
+  /**
+   * Busca la transacción por venta.
    * Si no existe, retorna null.
    */
   private async getTransaccionByVenta(ventaId: number): Promise<any | null> {
@@ -116,12 +116,11 @@ export class TarjetaComponent implements OnInit {
     try {
       return await this.http.get(`${this.BASE_API}/transaccion/findByCompra/${ventaId}`, { headers }).toPromise();
     } catch (e) {
-      // Si es 404 o error, retorna null
       return null;
     }
   }
 
-  /** Lógica para ACTUALIZAR la transacción existente, nunca crear otra nueva */
+  /** Solo muestra/usa el método de pago guardado, no lo actualiza */
   async payViaTarjeta() {
     if (this.tarjetaForm.invalid) {
       this.tarjetaForm.markAllAsTouched();
@@ -130,6 +129,13 @@ export class TarjetaComponent implements OnInit {
     const ventaId = localStorage.getItem('ventaId');
     if (!ventaId) {
       this.notify.error('No se encontró la venta a pagar. Intenta de nuevo.');
+      return;
+    }
+
+    // Usa el id de método de pago guardado
+    const idMetodoPago = Number(localStorage.getItem('metodoPagoId'));
+    if (!idMetodoPago) {
+      this.notify.error('No se encontró el método de pago seleccionado. Intenta de nuevo.');
       return;
     }
 
@@ -142,7 +148,7 @@ export class TarjetaComponent implements OnInit {
 
     this.setLoadingState(true);
 
-    // 1. Buscar transacción existente para esa venta
+    // Buscar transacción existente para esa venta
     const transaccion: any = await this.getTransaccionByVenta(Number(ventaId));
     if (!transaccion || !transaccion.id) {
       this.notify.error('No se encontró la transacción asociada a la venta.');
@@ -150,26 +156,27 @@ export class TarjetaComponent implements OnInit {
       return;
     }
 
-    // 2. Preparar el payload para ACTUALIZAR SOLO los campos necesarios
+    // Prepara el payload solo mostrando el método de pago guardado
     const payload = {
-      id: transaccion.id,                          // clave para actualizar
+      id: transaccion.id,                     // clave para actualizar
       idCompra: transaccion.idCompra,
-      idMetodoPago: 6,                             // Tarjeta
+      idMetodoPago,                           // DINÁMICO y ya ajustado en shipping
       idBanco: 'NA',
       idFranquicia: this.tarjetaForm.value.franquicia,
       numTarjeta: this.tarjetaForm.value.numeroTarjeta.replace(/-/g, ''),
       identificacion: this.tarjetaForm.value.identificacion,
       estado: 1,
-      valorTx: transaccion.valorTx,                // Conserva el valor original
-      fechaHora: new Date().toISOString()          // Actualiza la fecha/hora de pago
+      valorTx: transaccion.valorTx,
+      fechaHora: new Date().toISOString()
     };
 
-    // 3. Actualizar transacción (no crear nueva)
+    // Actualiza la transacción (no crea nueva)
     this.http.post(`${this.BASE_API}/transaccion/saveTransaccion`, payload, { headers })
       .subscribe({
         next: () => {
           localStorage.removeItem(this.getCartKey());
           localStorage.removeItem('ventaId');
+          localStorage.removeItem('metodoPagoId');
           this.setLoadingState(false);
           this.notify.success('Pago exitoso', 'Tu pago con tarjeta se procesó correctamente. Recibo enviado a tu correo.');
           setTimeout(() => this.router.navigate(['/usuario/vinilos']), 1500);
