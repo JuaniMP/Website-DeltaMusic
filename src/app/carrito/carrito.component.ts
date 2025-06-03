@@ -64,7 +64,6 @@ export class CarritoComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // Se cargan métodos, carrito y parámetros de IVA/Descuento en paralelo
     this.loadMetodosPago();
     this.loadCartItems();
     this.loadParametros();
@@ -112,7 +111,6 @@ export class CarritoComponent implements OnInit {
     const key = this.getCartKey();
     const raw = localStorage.getItem(key);
     this.cartItems = raw ? JSON.parse(raw) : [];
-    // No llamamos calculateTotals aquí, para evitar cálculos con datos nulos
   }
 
   private saveCart() {
@@ -127,14 +125,11 @@ export class CarritoComponent implements OnInit {
         this.ivaPercent = ivaParam?.valorNumero || 0;
         const discParam = params.find(p => p.descripcion === 'DESCUENTO' && p.estado === 1);
         this.discountPercent = discParam?.valorNumero || 0;
-
-        // Ya tenemos IVA/descuento, ahora sí calcular totales
         this.calculateTotals();
       },
       error: err => {
         console.error('Error al cargar parámetros', err);
         this.errorMsg = 'No pudimos cargar los parámetros de IVA/Descuento.';
-        // Aún así calculamos usando 0
         this.ivaPercent = 0;
         this.discountPercent = 0;
         this.calculateTotals();
@@ -143,7 +138,6 @@ export class CarritoComponent implements OnInit {
   }
 
   private calculateTotals() {
-    // Usa valores por defecto si aún no hay parámetros cargados
     const iva = this.ivaPercent || 0;
     const dscto = this.discountPercent || 0;
     const items = this.cartItems || [];
@@ -203,7 +197,6 @@ export class CarritoComponent implements OnInit {
       return;
     }
     this.showShipping = true;
-    // Calcula totales por si hubo cambios justo antes de pagar
     this.calculateTotals();
   }
 
@@ -219,171 +212,109 @@ export class CarritoComponent implements OnInit {
   }
 
   submitShipping() {
-  if (this.shippingForm.invalid) {
-    this.shippingForm.markAllAsTouched();
-    return;
-  }
+    if (this.shippingForm.invalid) {
+      this.shippingForm.markAllAsTouched();
+      return;
+    }
 
-  this.loading = true;
-  this.errorMsg = null;
-  const token = localStorage.getItem('auth_token') || '';
+    this.loading = true;
+    this.errorMsg = null;
+    const token = localStorage.getItem('auth_token') || '';
 
-  const correoBuscado = this.shippingForm.value.correoCliente.trim().toLowerCase();
-  const payloadCliente: any = {
-    nombreCliente: this.shippingForm.value.nombreCliente.trim(),
-    direccionCliente: this.shippingForm.value.direccionCliente.trim(),
-    correoCliente: correoBuscado,
-    telefono: this.shippingForm.value.telefono.trim(),
-    estado: 1
-  };
+    const correoBuscado = this.shippingForm.value.correoCliente.trim().toLowerCase();
+    const payloadCliente: any = {
+      nombreCliente: this.shippingForm.value.nombreCliente.trim(),
+      direccionCliente: this.shippingForm.value.direccionCliente.trim(),
+      correoCliente: correoBuscado,
+      telefono: this.shippingForm.value.telefono.trim(),
+      estado: 1
+    };
 
-  // 1. Buscar si el cliente ya existe por correo
-  this.http.get<any>(`http://localhost:8181/cliente/findByCorreo/${encodeURIComponent(correoBuscado)}`, {
-    headers: { Authorization: `Bearer ${token}` }
-  }).subscribe({
-    next: (clienteExistente) => {
-      let clienteObs;
-      if (clienteExistente && clienteExistente.id) {
-        // Existe: actualizar cliente
+    // Buscar si el cliente ya existe por correo
+    this.http.get<any>(`http://localhost:8181/cliente/findByCorreo/${encodeURIComponent(correoBuscado)}`, {
+      headers: { Authorization: `Bearer ${token}` }
+    }).subscribe({
+      next: (clienteExistente) => {
+        // Siempre USA POST para actualizar/crear el cliente (deja que el backend decida si es update o insert)
         payloadCliente.id = clienteExistente.id;
-        clienteObs = this.http.put<{ id: number }>(`${this.API_CLIENTE}/${clienteExistente.id}`, payloadCliente, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
-      } else {
-        // No existe: crear cliente
-        clienteObs = this.http.post<{ id: number }>(this.API_CLIENTE, payloadCliente, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
-      }
-
-      // Después de crear o actualizar, registrar la venta
-      clienteObs.subscribe({
-        next: (clienteGuardado) => {
-          if (!clienteGuardado || !clienteGuardado.id) {
-            this.notify.error('Error al crear/actualizar el cliente.');
-            this.loading = false;
-            return;
-          }
-          const idMetodoPago = this.shippingForm.value.metodoPago;
-
-          const payload = {
-            venta: {
-              idCliente: clienteGuardado.id,
-              detalles: this.cartItems.map(item => ({
-                idProducto: item.product.id,
-                cantComp: item.quantity
-              })),
-              fechaVenta: new Date()
-            },
-            transaccion: {
-              idMetodoPago,
-              idBanco: 'Bancolombia',
-              idFranquicia: 'NA',
-              numTarjeta: 'NA',
-              identificacion: '123456789'
-            }
-          };
-
-          this.http.post(this.API_VENTA, payload, {
-            headers: { Authorization: `Bearer ${token}` }
-          }).subscribe({
-            next: (res: any) => {
-              this.notify.success('Venta registrada correctamente.');
-              localStorage.setItem('ventaId', String(res.id));
-              this.showShipping = false;
-              const metodoSel = this.metodosPago.find(m => m.id === idMetodoPago)?.descripcion?.toUpperCase() ?? '';
-              if (metodoSel.includes('PSE')) {
-                this.router.navigate(['/usuario/pse']);
-              } else if (metodoSel.includes('TARJETA')) {
-                this.router.navigate(['/usuario/tarjeta']);
-              } else {
-                this.router.navigate(['/usuario']);
-              }
-              this.loading = false;
-            },
-            error: err => {
-              console.error('Error al guardar la venta:', err);
-              this.notify.error(err.error || 'Error al procesar la venta.');
-              this.loading = false;
-            }
-          });
-        },
-        error: err => {
-          console.error('Error al crear/actualizar cliente:', err);
-          this.notify.error('No se pudo crear/actualizar el cliente.');
-          this.loading = false;
-        }
-      });
-    },
-    error: err => {
-      // Si NO existe (404 o similar), simplemente crea el cliente
-      if (err.status === 404) {
-        this.http.post<{ id: number }>(this.API_CLIENTE, payloadCliente, {
+        this.http.post<{ id: number }>('http://localhost:8181/cliente/saveCliente', payloadCliente, {
           headers: { Authorization: `Bearer ${token}` }
         }).subscribe({
-          next: (clienteGuardado) => {
-            if (!clienteGuardado || !clienteGuardado.id) {
-              this.notify.error('Error al crear el cliente.');
-              this.loading = false;
-              return;
-            }
-            const idMetodoPago = this.shippingForm.value.metodoPago;
-
-            const payload = {
-              venta: {
-                idCliente: clienteGuardado.id,
-                detalles: this.cartItems.map(item => ({
-                  idProducto: item.product.id,
-                  cantComp: item.quantity
-                })),
-                fechaVenta: new Date()
-              },
-              transaccion: {
-                idMetodoPago,
-                idBanco: 'Bancolombia',
-                idFranquicia: 'NA',
-                numTarjeta: 'NA',
-                identificacion: '123456789'
-              }
-            };
-
-            this.http.post(this.API_VENTA, payload, {
-              headers: { Authorization: `Bearer ${token}` }
-            }).subscribe({
-              next: (res: any) => {
-                this.notify.success('Venta registrada correctamente.');
-                localStorage.setItem('ventaId', String(res.id));
-                this.showShipping = false;
-                const metodoSel = this.metodosPago.find(m => m.id === idMetodoPago)?.descripcion?.toUpperCase() ?? '';
-                if (metodoSel.includes('PSE')) {
-                  this.router.navigate(['/usuario/pse']);
-                } else if (metodoSel.includes('TARJETA')) {
-                  this.router.navigate(['/usuario/tarjeta']);
-                } else {
-                  this.router.navigate(['/usuario']);
-                }
-                this.loading = false;
-              },
-              error: err => {
-                console.error('Error al guardar la venta:', err);
-                this.notify.error(err.error || 'Error al procesar la venta.');
-                this.loading = false;
-              }
-            });
-          },
-          error: err2 => {
-            console.error('Error al crear cliente:', err2);
-            this.notify.error('No se pudo crear el cliente.');
-            this.loading = false;
-          }
+          next: (clienteGuardado) => this.crearVentaConCliente(clienteGuardado.id),
+          error: err => this.handleErrorCliente(err)
         });
-      } else {
-        console.error('Error al buscar cliente:', err);
-        this.notify.error('No se pudo verificar el cliente.');
+      },
+      error: err => {
+        if (err.status === 404) {
+          // No existe: CREA el cliente
+          this.http.post<{ id: number }>('http://localhost:8181/cliente/saveCliente', payloadCliente, {
+            headers: { Authorization: `Bearer ${token}` }
+          }).subscribe({
+            next: (clienteGuardado) => this.crearVentaConCliente(clienteGuardado.id),
+            error: err2 => this.handleErrorCliente(err2)
+          });
+        } else {
+          this.handleErrorCliente(err);
+        }
+      }
+    });
+  }
+
+  private crearVentaConCliente(clienteId: number) {
+    if (!clienteId) {
+      this.notify.error('Error al crear/actualizar el cliente.');
+      this.loading = false;
+      return;
+    }
+    const idMetodoPago = this.shippingForm.value.metodoPago;
+    const payload = {
+      venta: {
+        idCliente: clienteId,
+        detalles: this.cartItems.map(item => ({
+          idProducto: item.product.id,
+          cantComp: item.quantity
+        })),
+        fechaVenta: new Date()
+      },
+      transaccion: {
+        idMetodoPago,
+        idBanco: 'Bancolombia',
+        idFranquicia: 'NA',
+        numTarjeta: 'NA',
+        identificacion: '123456789'
+      }
+    };
+
+    const token = localStorage.getItem('auth_token') || '';
+    this.http.post('http://localhost:8181/venta/saveVenta', payload, {
+      headers: { Authorization: `Bearer ${token}` }
+    }).subscribe({
+      next: (res: any) => {
+        this.notify.success('Venta registrada correctamente.');
+        localStorage.setItem('ventaId', String(res.id));
+        this.showShipping = false;
+        // Redirecciona según método de pago
+        const metodoSel = this.metodosPago.find(m => m.id === idMetodoPago)?.descripcion?.toUpperCase() ?? '';
+        if (metodoSel.includes('PSE')) {
+          this.router.navigate(['/usuario/pse']);
+        } else if (metodoSel.includes('TARJETA')) {
+          this.router.navigate(['/usuario/tarjeta']);
+        } else {
+          this.router.navigate(['/usuario']);
+        }
+        this.loading = false;
+      },
+      error: err => {
+        console.error('Error al guardar la venta:', err);
+        this.notify.error(err.error || 'Error al procesar la venta.');
         this.loading = false;
       }
-    }
-  });
-}
+    });
+  }
 
+  private handleErrorCliente(err: any) {
+    console.error('Error al crear/actualizar cliente:', err);
+    this.notify.error('No se pudo crear/actualizar el cliente.');
+    this.loading = false;
+  }
 }

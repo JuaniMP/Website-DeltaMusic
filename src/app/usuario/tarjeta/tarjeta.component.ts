@@ -1,20 +1,11 @@
-// src/app/usuario/tarjeta/tarjeta.component.ts
-
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
-  FormBuilder,
-  FormGroup,
-  Validators,
-  ReactiveFormsModule,
-  AbstractControl,
-  ValidationErrors,
-  ValidatorFn
+  FormBuilder, FormGroup, Validators, ReactiveFormsModule,
+  AbstractControl, ValidationErrors, ValidatorFn
 } from '@angular/forms';
 import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http';
 import { Router, RouterModule } from '@angular/router';
-import { forkJoin, of } from 'rxjs';
-import { catchError, switchMap } from 'rxjs/operators';
 import { NotificationService } from '../../shared/notification.service';
 
 interface Producto {
@@ -24,11 +15,7 @@ interface Producto {
   precioVentaActual: number;
   tieneIva: number;
 }
-
-interface CartItem {
-  product: Producto;
-  quantity: number;
-}
+interface CartItem { product: Producto; quantity: number; }
 
 @Component({
   selector: 'app-tarjeta',
@@ -44,15 +31,11 @@ interface CartItem {
 })
 export class TarjetaComponent implements OnInit {
 
-  identificacionCliente: string = '';
   tarjetaForm!: FormGroup;
   cartItems: CartItem[] = [];
   isLoading = false;
 
-  private readonly BASE_API        = 'http://localhost:8181';
-  private readonly VENTA_API       = `${this.BASE_API}/venta/saveVenta`;
-  private readonly TRANSACCION_API = `${this.BASE_API}/transaccion/saveTransaccion`;
-  private readonly PRODUCTO_API    = `${this.BASE_API}/producto/saveProducto`;
+  private readonly BASE_API  = 'http://localhost:8181';
 
   constructor(
     private fb: FormBuilder,
@@ -62,41 +45,33 @@ export class TarjetaComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    const rawShipping = localStorage.getItem('shipping');
-    if (rawShipping) {
-      try {
-        const ship = JSON.parse(rawShipping) as { idCliente: number; identificacion: string };
-        this.identificacionCliente = ship.identificacion || '';
-      } catch {
-        this.identificacionCliente = '';
-      }
-    }
-
-    // El campo 'identificacion' ahora editable y recomendado
     this.tarjetaForm = this.fb.group({
-      identificacion: [
-        { value: this.identificacionCliente, disabled: false }, // editable
-        [Validators.required]
-      ],
+      identificacion: ['', [Validators.required]],
       numeroTarjeta: [
-        '',
+        { value: '', disabled: false },
         [
           Validators.required,
           Validators.pattern(/^[0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{4}$/),
           this.noAllSameDigits()
         ]
       ],
-      franquicia:     ['', [ Validators.required ]],
-      expiracion:     ['', [ Validators.required, Validators.pattern(/^(0[1-9]|1[0-2])\/\d{2}$/) ]],
-      cvv:            ['', [ Validators.required, Validators.pattern(/^\d{3}$/) ]]
+      franquicia:     ['', [Validators.required]],
+      expiracion:     ['', [Validators.required, Validators.pattern(/^(0[1-9]|1[0-2])\/\d{2}$/)]],
+      cvv:            ['', [Validators.required, Validators.pattern(/^\d{3}$/)]]
     });
-
     this.loadCartItems();
   }
 
-  get f() {
-    return this.tarjetaForm.controls;
+  private setLoadingState(loading: boolean) {
+    this.isLoading = loading;
+    if (loading) {
+      this.tarjetaForm.disable();
+    } else {
+      this.tarjetaForm.enable();
+    }
   }
+
+  get f() { return this.tarjetaForm.controls; }
 
   private getCartKey(): string {
     const rawUser = localStorage.getItem('auth_user');
@@ -114,11 +89,8 @@ export class TarjetaComponent implements OnInit {
     const raw = localStorage.getItem(key);
     this.cartItems = [];
     if (raw) {
-      try {
-        this.cartItems = JSON.parse(raw) as CartItem[];
-      } catch {
-        this.cartItems = [];
-      }
+      try { this.cartItems = JSON.parse(raw) as CartItem[]; }
+      catch { this.cartItems = []; }
     }
   }
 
@@ -127,117 +99,86 @@ export class TarjetaComponent implements OnInit {
       const val: string = control.value;
       if (!val) return null;
       const digits = val.replace(/-/g, '');
-      if (digits.length !== 16) {
-        return null;
-      }
+      if (digits.length !== 16) return null;
       const first = digits[0];
       const allSame = digits.split('').every(d => d === first);
       return allSame ? { allSame: true } : null;
     };
   }
 
-  payViaTarjeta(): void {
+  /** 
+   * Busca la transacción por venta. 
+   * Si no existe, retorna null.
+   */
+  private async getTransaccionByVenta(ventaId: number): Promise<any | null> {
+    const token = localStorage.getItem('auth_token');
+    const headers = { Authorization: `Bearer ${token}` };
+    try {
+      return await this.http.get(`${this.BASE_API}/transaccion/findByCompra/${ventaId}`, { headers }).toPromise();
+    } catch (e) {
+      // Si es 404 o error, retorna null
+      return null;
+    }
+  }
+
+  /** Lógica para ACTUALIZAR la transacción existente, nunca crear otra nueva */
+  async payViaTarjeta() {
     if (this.tarjetaForm.invalid) {
       this.tarjetaForm.markAllAsTouched();
       return;
     }
-
-    const idVenta = +(localStorage.getItem('ventaId') || 0);
-    if (!idVenta) {
-      this.notify.error('No se encontró la venta para procesar.');
+    const ventaId = localStorage.getItem('ventaId');
+    if (!ventaId) {
+      this.notify.error('No se encontró la venta a pagar. Intenta de nuevo.');
       return;
     }
 
-    if (this.cartItems.length === 0) {
-      this.notify.error('Tu carrito está vacío.');
-      return;
-    }
-
-    // --- TOKEN ---
-    const token = localStorage.getItem('token') || '';
+    const token = localStorage.getItem('auth_token');
     if (!token) {
-      this.notify.error('No hay token de autenticación. Vuelve a iniciar sesión.');
-      this.isLoading = false;
+      this.notify.error('No estás autenticado. Por favor inicia sesión.');
       return;
     }
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`
-    });
+    const headers = { Authorization: `Bearer ${token}` };
 
-    this.isLoading = true;
+    this.setLoadingState(true);
 
-    // 1. Traer la venta para actualizar
-    this.http.get<any>(`${this.BASE_API}/venta/findRecord/${idVenta}`, { headers }).pipe(
-      switchMap((venta) => {
-        if (!venta) throw new Error('No existe la venta');
-        venta.valorVenta = this.cartItems.reduce((sum, item) => sum + (item.product.precioVentaActual * item.quantity), 0);
-        venta.valorIva = this.cartItems.filter(item => item.product.tieneIva === 1)
-                                .reduce((sum, item) => sum + Math.round(item.product.precioVentaActual * item.quantity * 0.19), 0);
-        venta.estado = 2; // Pagada
+    // 1. Buscar transacción existente para esa venta
+    const transaccion: any = await this.getTransaccionByVenta(Number(ventaId));
+    if (!transaccion || !transaccion.id) {
+      this.notify.error('No se encontró la transacción asociada a la venta.');
+      this.setLoadingState(false);
+      return;
+    }
 
-        // Debes enviar el request como lo espera tu backend:
-        const ventaRequest = {
-          venta: {
-            ...venta,
-            detalles: this.cartItems.map(item => ({
-              idProducto: item.product.id,
-              cantComp: item.quantity
-            }))
-          },
-          transaccion: {
-            idMetodoPago: 6,
-            idBanco: 'NA',
-            idFranquicia: this.tarjetaForm.value.franquicia,
-            numTarjeta: this.tarjetaForm.value.numeroTarjeta.replace(/-/g, ''),
-            identificacion: this.tarjetaForm.value.identificacion,
-            estado: 1
-          }
-        };
+    // 2. Preparar el payload para ACTUALIZAR SOLO los campos necesarios
+    const payload = {
+      id: transaccion.id,                          // clave para actualizar
+      idCompra: transaccion.idCompra,
+      idMetodoPago: 6,                             // Tarjeta
+      idBanco: 'NA',
+      idFranquicia: this.tarjetaForm.value.franquicia,
+      numTarjeta: this.tarjetaForm.value.numeroTarjeta.replace(/-/g, ''),
+      identificacion: this.tarjetaForm.value.identificacion,
+      estado: 1,
+      valorTx: transaccion.valorTx,                // Conserva el valor original
+      fechaHora: new Date().toISOString()          // Actualiza la fecha/hora de pago
+    };
 
-        return this.http.post<any>(`${this.BASE_API}/venta/saveVenta`, ventaRequest, { headers });
-      }),
-      // 3. Actualizar stock productos (opcional, puedes omitir si ya lo hace el backend)
-      switchMap((ventaResp) => {
-        const llamadas = this.cartItems.map(item => {
-          return this.http
-            .get<Producto>(`${this.BASE_API}/producto/getById/${item.product.id}`, { headers }) // <--- AQUÍ
-            .pipe(
-              switchMap(prod => {
-                prod.existencia -= item.quantity;
-                return this.http.post(`${this.PRODUCTO_API}`, prod, { headers }); // <--- Y AQUÍ
-              }),
-              catchError(err => {
-                console.error('Error actualizando stock:', err);
-                return of(null);
-              })
-            );
-        });
-        return forkJoin(llamadas);
-      })
-    ).subscribe({
-      next: () => {
-        this.finalizarPago();
-      },
-      error: (err) => {
-        this.notify.error('Error al procesar el pago: ' + (err.error || err.message || ''));
-        this.isLoading = false;
-      }
-    });
-  }
-
-  private finalizarPago(): void {
-    // Limpia carrito
-    const key = this.getCartKey();
-    localStorage.removeItem(key);
-
-    this.isLoading = false;
-    this.notify.success(
-      'Pago exitoso',
-      'Tu pago con tarjeta se procesó correctamente. Recibo enviado a tu correo.'
-    );
-    setTimeout(() => {
-      this.router.navigate(['/usuario/vinilos']);
-    }, 1500);
+    // 3. Actualizar transacción (no crear nueva)
+    this.http.post(`${this.BASE_API}/transaccion/saveTransaccion`, payload, { headers })
+      .subscribe({
+        next: () => {
+          localStorage.removeItem(this.getCartKey());
+          localStorage.removeItem('ventaId');
+          this.setLoadingState(false);
+          this.notify.success('Pago exitoso', 'Tu pago con tarjeta se procesó correctamente. Recibo enviado a tu correo.');
+          setTimeout(() => this.router.navigate(['/usuario/vinilos']), 1500);
+        },
+        error: (err) => {
+          this.notify.error('Error al procesar el pago: ' + (err.error || err.message || ''));
+          this.setLoadingState(false);
+        }
+      });
   }
 
   cancelar(): void {
