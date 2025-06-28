@@ -1,59 +1,69 @@
-# Testapp
+# FrontdEnd
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.11.
+FrontdEnd es el frontend de una página web para la venta de discos y vinilos, desarrollada en TypeScript. El sitio permite a los usuarios navegar, seleccionar y comprar música en distintos formatos, con integración de pasarela de pagos.
 
-## Development server
+## Características principales
 
-To start a local development server, run:
+- Página web para vender discos y vinilos.
+- Carrito de compras para que el cliente seleccione productos y gestione su compra.
+- Pasarela de pagos integrada para realizar compras seguras.
+- Modo administrador, donde se pueden visualizar estadísticas, transacciones, clientes, compras y auditorías.
+- Panel de cliente donde puede ver y gestionar su carrito.
+- Aún hay cosas por mejorar y nuevas funcionalidades por implementar.
 
-```bash
-ng serve
-```
+## Instalación
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+1. Clona el repositorio:
+   ```bash
+   git clone https://github.com/JuaniMP/FrontdEnd.git
+   cd FrontdEnd
+   ```
+2. Instala las dependencias:
+   ```bash
+   npm install
+   ```
+3. Inicia el proyecto:
+   ```bash
+   npm start
+   ```
 
-## Code scaffolding
+## Imágenes
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+Aquí puedes agregar capturas de pantalla o GIFs de tu aplicación para mostrar su funcionamiento:
 
-```bash
-ng generate component component-name
-```
+- Página principal
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+  ![image1](ruta/a/tu/imagen1.png)
 
-```bash
-ng generate --help
-```
+- Vista del carrito de compras
 
-## Building
+  ![image2](ruta/a/tu/imagen2.png)
 
-To build the project run:
+- Panel de administración (estadísticas y auditorías)
 
-```bash
-ng build
-```
+  ![image3](ruta/a/tu/imagen3.png)
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+_Reemplaza las rutas de las imágenes por la ubicación real de tus archivos._
 
-## Running unit tests
+## Estructura del proyecto
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+- `src/` - Código fuente principal de la aplicación.
+- `public/` - Archivos estáticos.
+- `package.json` - Dependencias y scripts del proyecto.
 
-```bash
-ng test
-```
+## Uso
 
-## Running end-to-end tests
+- Los clientes pueden navegar por los productos, agregar discos/vinilos al carrito y realizar pagos.
+- El administrador puede acceder a estadísticas, auditorías, transacciones y gestionar clientes y compras desde el panel admin.
 
-For end-to-end (e2e) testing, run:
+## Contribuciones
 
-```bash
-ng e2e
-```
+¡Las contribuciones son bienvenidas! Si deseas mejorar el proyecto, por favor abre un issue o envía un pull request.
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+## Licencia
 
-## Additional Resources
+Este proyecto actualmente no tiene una licencia especificada.
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+## Autor
+
+- [JuaniMP](https://github.com/JuaniMP)
