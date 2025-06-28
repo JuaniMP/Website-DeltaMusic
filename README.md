@@ -33,7 +33,7 @@ Aquí puedes agregar capturas de pantalla o GIFs de tu aplicación para mostrar 
 
 - Página principal
 
-  ![image1]![image](https://github.com/user-attachments/assets/d0957feb-51fa-4620-9dfc-ac04d50bc2cf)
+  ![image1](https://github.com/user-attachments/assets/d0957feb-51fa-4620-9dfc-ac04d50bc2cf)
 
 
 - Vista del carrito de compras
