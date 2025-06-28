@@ -1,70 +1,78 @@
 # FrontdEnd
 
-FrontdEnd es el frontend de una página web para la venta de discos y vinilos, desarrollada en TypeScript. El sitio permite a los usuarios navegar, seleccionar y comprar música en distintos formatos, con integración de pasarela de pagos.
+FrontdEnd is the frontend of a website for selling records and vinyls, developed in Angular and TypeScript. The site allows users to browse, select, and purchase music in various formats, with an integrated payment gateway. The frontend connects to a backend developed in Java with Spring Boot, which uses a local MySQL database.
 
-## Características principales
+## Main Features
 
-- Página web para vender discos y vinilos.
-- Carrito de compras para que el cliente seleccione productos y gestione su compra.
-- Pasarela de pagos integrada para realizar compras seguras.
-- Modo administrador, donde se pueden visualizar estadísticas, transacciones, clientes, compras y auditorías.
-- Panel de cliente donde puede ver y gestionar su carrito.
-- Aún hay cosas por mejorar y nuevas funcionalidades por implementar.
+- Website for selling records and vinyls.
+- Shopping cart so customers can select products and manage their purchases.
+- Integrated payment gateway for secure transactions.
+- Admin mode, where statistics, transactions, customers, purchases, and audits can be viewed.
+- Customer panel where users can view and manage their cart.
+- There are still areas for improvement and new features to be implemented.
 
-## Instalación
+## Tech Stack
 
-1. Clona el repositorio:
+- **Frontend:** Angular, TypeScript
+- **Backend:** Java, Spring Boot
+- **Database:** MySQL (local connection)
+
+## Installation
+
+1. Clone the repository:
    ```bash
    git clone https://github.com/JuaniMP/FrontdEnd.git
    cd FrontdEnd
    ```
-2. Instala las dependencias:
+2. Install dependencies:
    ```bash
    npm install
    ```
-3. Inicia el proyecto:
+3. Start the project:
    ```bash
    npm start
    ```
 
-## Imágenes
+## Images
 
-Aquí puedes agregar capturas de pantalla o GIFs de tu aplicación para mostrar su funcionamiento:
+You can add screenshots or GIFs of your application here to show how it works:
 
-- Página principal
+- Home Page
 
   ![image1](https://github.com/user-attachments/assets/d0957feb-51fa-4620-9dfc-ac04d50bc2cf)
 
+- 
+  ![image](https://github.com/user-attachments/assets/4092389a-d186-408b-a04a-c2aee54bec5d)
 
-- Vista del carrito de compras
+- Shopping Cart View
 
-  ![image2](ruta/a/tu/imagen2.png)
+  ![image2](path/to/your/image2.png)
 
-- Panel de administración (estadísticas y auditorías)
+- Admin Panel (Statistics and Audits)
 
-  ![image3](ruta/a/tu/imagen3.png)
+  ![image3](path/to/your/image3.png)
 
-_Reemplaza las rutas de las imágenes por la ubicación real de tus archivos._
+_Replace the image paths with the actual location of your files._
 
-## Estructura del proyecto
+## Project Structure
 
-- `src/` - Código fuente principal de la aplicación.
-- `public/` - Archivos estáticos.
-- `package.json` - Dependencias y scripts del proyecto.
+- `src/` - Main source code of the application.
+- `public/` - Static files.
+- `package.json` - Project dependencies and scripts.
 
-## Uso
+## Usage
 
-- Los clientes pueden navegar por los productos, agregar discos/vinilos al carrito y realizar pagos.
-- El administrador puede acceder a estadísticas, auditorías, transacciones y gestionar clientes y compras desde el panel admin.
+- Customers can browse products, add records/vinyls to the cart, and make payments.
+- The administrator can access statistics, audits, transactions, and manage clients and purchases from the admin panel.
 
-## Contribuciones
+## Contributions
 
-¡Las contribuciones son bienvenidas! Si deseas mejorar el proyecto, por favor abre un issue o envía un pull request.
+Contributions are welcome! If you want to improve the project, please open an issue or submit a pull request.
 
-## Licencia
+## License
 
-Este proyecto actualmente no tiene una licencia especificada.
+This project currently does not have a specified license.
 
-## Autor
+## Author
 
 - [JuaniMP](https://github.com/JuaniMP)
