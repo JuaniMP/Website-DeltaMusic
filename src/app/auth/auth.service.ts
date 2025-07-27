@@ -1,29 +1,25 @@
-// src/app/auth/auth.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { tap } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { jwtDecode } from 'jwt-decode';
-import { environment } from '../../environments/environment';  // Ajusta la ruta según ubicación real
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  // Aquí concatenamos la base URL dinámica con el path específico /usuario
   private apiUrl = environment.API_URL + '/usuario';
 
   constructor(private http: HttpClient) {}
 
   login(credentials: { correo: string; clave: string }) {
-    return this.http
-      .post<any>(`${this.apiUrl}/login`, credentials)
-      .pipe(
-        tap((res) => {
-          localStorage.setItem('auth_token', res.token);
-          localStorage.setItem('auth_user', JSON.stringify(res.usuario));
-        })
-      );
+    return this.http.post<any>(`${this.apiUrl}/login`, credentials).pipe(
+      tap((res) => {
+        localStorage.setItem('auth_token', res.token);
+        localStorage.setItem('auth_user', JSON.stringify(res.usuario));
+      })
+    );
   }
 
   register(data: {
@@ -38,16 +34,16 @@ export class AuthService {
     );
   }
 
-  checkEmail(email: string): Observable<boolean> {
+  checkEmail(correo: string): Observable<boolean> {
     return this.http.get<boolean>(
-      `${this.apiUrl}/existsByEmail/${encodeURIComponent(email)}`
+      `${this.apiUrl}/existsByEmail/${encodeURIComponent(correo)}`
     );
   }
 
-  requestPasswordReset(email: string): Observable<string> {
+  requestPasswordReset(correo: string): Observable<string> {
     return this.http.post(
       `${this.apiUrl}/forgot`,
-      { correoUsuario: email },
+      { correo },
       { responseType: 'text' } as const
     );
   }
