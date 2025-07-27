@@ -1,22 +1,23 @@
-import { Component, OnInit }           from '@angular/core';
-import { CommonModule }                from '@angular/common';
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { Router, RouterModule }        from '@angular/router';
-import { NotificationService }         from '../../shared/notification.service';
+import { Router, RouterModule } from '@angular/router';
+import { NotificationService } from '../../shared/notification.service';
+import { environment } from '../../../environments/environment';  // Importa environment
 
 interface Producto {
   id: number;
-  idCategoria: number;        // 1 = vinilo (inglés), 2 = vinilo (español)
+  idCategoria: number;      // 1 = vinilo (inglés), 2 = vinilo (español)
   referencia: string;
   descripcion: string;
   existencia: number;
   precioVentaActual: number;
   precioVentaAnterior: number;
   costoCompra: number;
-  tieneIva: number;           // 1 = sí, 0 = no
+  tieneIva: number;         // 1 = sí, 0 = no
   stockMaximo: number;
   fotoProducto: string;
-  estado: number;             // 1 = activo, 0 = inactivo
+  estado: number;           // 1 = activo, 0 = inactivo
 }
 
 /** Cada elemento de carrito contendrá el producto completo + la cantidad elegida. */
@@ -41,7 +42,8 @@ export class VinilosComponent implements OnInit {
   /** Mapa que guarda la cantidad seleccionada para cada producto en pantalla (inicialmente 0) */
   quantities: { [productId: number]: number } = {};
 
-  private readonly API_URL = 'http://localhost:8181/producto/getAll';
+  // Cambiado a usar la URL base dinámica desde environment
+  private readonly API_URL = environment.API_URL + '/producto/getAll';
 
   constructor(
     private http: HttpClient,

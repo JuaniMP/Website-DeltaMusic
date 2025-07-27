@@ -1,15 +1,17 @@
+// src/app/auth/auth.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { tap } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { jwtDecode } from 'jwt-decode';
-
+import { environment } from '../../environments/environment';  // Ajusta la ruta según ubicación real
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:8181/usuario';
+  // Aquí concatenamos la base URL dinámica con el path específico /usuario
+  private apiUrl = environment.API_URL + '/usuario';
 
   constructor(private http: HttpClient) {}
 
@@ -23,7 +25,6 @@ export class AuthService {
         })
       );
   }
-  
 
   register(data: {
     nombre: string;
@@ -42,17 +43,14 @@ export class AuthService {
       `${this.apiUrl}/existsByEmail/${encodeURIComponent(email)}`
     );
   }
-  // src/app/auth/auth.service.ts
-// src/app/auth/auth.service.ts
-requestPasswordReset(email: string): Observable<string> {
+
+  requestPasswordReset(email: string): Observable<string> {
     return this.http.post(
       `${this.apiUrl}/forgot`,
-      { correoUsuario: email },           // ← coincide con lo que lee el controlador
-      { responseType: 'text' } as const    // ← devuelve texto, no JSON
+      { correoUsuario: email },
+      { responseType: 'text' } as const
     );
   }
-
-
 
   logout() {
     localStorage.removeItem('auth_token');
@@ -68,32 +66,28 @@ requestPasswordReset(email: string): Observable<string> {
     return raw ? JSON.parse(raw) : null;
   }
 
-  // src/app/auth/auth.service.ts
-getRole(): 'admin' | 'user' | null {
-  const tipo = this.getUser()?.idTipoUsuario;
-  if (tipo === 'A') {
-    return 'admin';
+  getRole(): 'admin' | 'user' | null {
+    const tipo = this.getUser()?.idTipoUsuario;
+    if (tipo === 'A') {
+      return 'admin';
+    }
+    if (tipo === 'U' || tipo === '2') {
+      return 'user';
+    }
+    return null;
   }
-  // Aceptamos tanto 'U' como '2' (o el valor que uses para usuarios normales)
-  if (tipo === 'U' || tipo === '2') {
-    return 'user';
-  }
-  return null;
-}
-
 
   isAuthenticated(): boolean {
     const token = this.getToken();
     if (!token) {
-      return false; // No hay token, no está autenticado
+      return false;
     }
-
     try {
-      const decoded: any = jwtDecode(token); // Decodifica el token
-      const currentTime = Math.floor(Date.now() / 1000); // Tiempo actual en segundos
-      return decoded.exp > currentTime; // Verifica si el token no ha expirado
-    } catch (error) {
-      return false; // Si el token no es válido, no está autenticado
+      const decoded: any = jwtDecode(token);
+      const currentTime = Math.floor(Date.now() / 1000);
+      return decoded.exp > currentTime;
+    } catch {
+      return false;
     }
   }
 }

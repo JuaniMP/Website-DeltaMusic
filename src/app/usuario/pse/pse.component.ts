@@ -4,6 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Router, RouterModule } from '@angular/router';
 import { NotificationService } from '../../shared/notification.service';
+import { environment } from '../../../environments/environment';  // Importa variables de entorno
+
 
 interface Producto {
   id: number;
@@ -13,6 +15,7 @@ interface Producto {
   tieneIva: number;
 }
 interface CartItem { product: Producto; quantity: number; }
+
 
 @Component({
   selector: 'app-pse',
@@ -27,6 +30,7 @@ interface CartItem { product: Producto; quantity: number; }
   styleUrls: ['./pse.component.css']
 })
 export class PseComponent implements OnInit {
+
 
   transactionId: string = '';
   userEmail: string = '';
@@ -45,15 +49,20 @@ export class PseComponent implements OnInit {
   ];
   isLoading: boolean = false;
 
+
   cartItems: CartItem[] = [];
 
-  private readonly BASE_API = 'http://localhost:8181';
+
+  // Cambiado a URL dinámica según ambiente (local o producción)
+  private readonly BASE_API = environment.API_URL;
+
 
   constructor(
     private router: Router,
     private http: HttpClient,
     private notify: NotificationService
   ) {}
+
 
   ngOnInit(): void {
     this.transactionId = 'TX-' + Math.floor(Math.random() * 1_000_000_000);
@@ -72,6 +81,7 @@ export class PseComponent implements OnInit {
     }
     this.loadCartItems();
   }
+
 
   private getCartKey(): string {
     const rawUser = localStorage.getItem('auth_user');
@@ -93,6 +103,7 @@ export class PseComponent implements OnInit {
     }
   }
 
+
   payViaPSE(): void {
     if (!this.tipoCliente) {
       this.notify.error('Debes seleccionar el tipo de cliente.');
@@ -111,12 +122,14 @@ export class PseComponent implements OnInit {
       return;
     }
 
+
     const token = localStorage.getItem('auth_token');
     if (!token) {
       this.notify.error('No estás autenticado. Por favor inicia sesión.');
       return;
     }
     const headers = { Authorization: `Bearer ${token}` };
+
 
     // Obtener la ventaId guardada al crear la venta (debe estar en localStorage)
     const ventaId = localStorage.getItem('ventaId');
@@ -125,7 +138,9 @@ export class PseComponent implements OnInit {
       return;
     }
 
+
     this.isLoading = true;
+
 
     // Buscar transacción asociada a la venta
     this.http.get<any>(`${this.BASE_API}/transaccion/findByCompra/${ventaId}`, { headers })
@@ -143,6 +158,7 @@ export class PseComponent implements OnInit {
             identificacion: this.identificacionCliente,
             estado: 1 // o el estado correspondiente
           };
+
 
           // ACTUALIZA por POST a /transaccion/saveTransaccion
           this.http.post(`${this.BASE_API}/transaccion/saveTransaccion`, payloadTx, { headers })
@@ -165,6 +181,7 @@ export class PseComponent implements OnInit {
         }
       });
   }
+
 
   cancelar(): void {
     this.router.navigate(['/usuario/carrito']);

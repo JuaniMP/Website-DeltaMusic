@@ -3,12 +3,15 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { User } from '../models/user.model';
+import { environment } from '../../../environments/environment'; // Ajusta la ruta si tu estructura es distinta
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
-  private baseUrl = 'http://localhost:8181/usuario';
+
+  // Usamos la URL base del environment para apuntar al backend correcto
+  private baseUrl = environment.API_URL + '/usuario';
 
   constructor(private http: HttpClient) {}
 

@@ -1,13 +1,15 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment'; // Ajusta la ruta relativa según dónde esté el servicio
 
 @Injectable({
   providedIn: 'root'
 })
 export class StatisticsService {
-
-  private apiUrl = 'http://localhost:8181/reporte/estadisticas'; // Cambia el host/puerto si tu backend es diferente
+  
+  // Base URL dinámica usando la variable de entorno y concatenando la ruta específica
+  private apiUrl = environment.API_URL + '/reporte/estadisticas';
 
   constructor(private http: HttpClient) {}
 
@@ -25,8 +27,8 @@ export class StatisticsService {
     });
   }
 
-  // Si algún día tienes un endpoint para datos estadísticos tipo JSON, puedes agregar:
+  // En caso de que agregues futuros endpoints JSON para estadísticas
   // getDashboardStats(): Observable<any> {
-  //   return this.http.get('URL_DEL_ENDPOINT_ESTADISTICAS');
+  //   return this.http.get(`${this.apiUrl}/dashboard`);
   // }
 }

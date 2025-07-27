@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment'; // Ajusta la ruta según tu estructura
 
 export interface Empresa {
   id: number;
@@ -15,11 +16,13 @@ export interface Empresa {
   providedIn: 'root'
 })
 export class EmpresaService {
-  private readonly API_URL = 'http://localhost:8181/empresa/getAll';
+  // Usar la base URL desde environment y concatenar la ruta de la API
+  private readonly API_URL = environment.API_URL + '/empresa';
 
   constructor(private http: HttpClient) {}
 
   getEmpresa(): Observable<Empresa[]> {
-    return this.http.get<Empresa[]>(this.API_URL);
+    // Aquí llamamos al endpoint getAll con la URL completa
+    return this.http.get<Empresa[]>(`${this.API_URL}/getAll`);
   }
 }

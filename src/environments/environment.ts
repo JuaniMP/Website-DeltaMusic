@@ -1,4 +1,4 @@
 export const environment = {
-    production: true,
-    apiUrl: 'http://localhost:8181'
+  production: false,
+  API_URL: 'http://localhost:8181'  // URL backend local para pruebas
 };

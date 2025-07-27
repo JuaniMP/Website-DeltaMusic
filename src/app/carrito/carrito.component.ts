@@ -4,6 +4,8 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Router, RouterModule } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { NotificationService } from '../shared/notification.service';
+import { environment } from '../../environments/environment';  // Ruta correcta según estructura
+
 
 interface Producto {
   id: number;
@@ -19,8 +21,18 @@ interface Producto {
   fotoProducto: string;
   estado: number;
 }
-interface CartItem { product: Producto; quantity: number; }
-interface MetodoPago { id: number; descripcion: string; estado: number; }
+
+interface CartItem { 
+  product: Producto; 
+  quantity: number; 
+}
+
+interface MetodoPago { 
+  id: number; 
+  descripcion: string; 
+  estado: number; 
+}
+
 
 @Component({
   selector: 'app-carrito',
@@ -51,10 +63,12 @@ export class CarritoComponent implements OnInit {
   shippingForm!: FormGroup;
   metodosPago: MetodoPago[] = [];
 
-  private readonly API_PARAMETROS = 'http://localhost:8181/parametro/getAll';
-  private readonly API_VENTA = 'http://localhost:8181/venta/saveVenta';
-  private readonly API_CLIENTE = 'http://localhost:8181/cliente/saveCliente';
-  private readonly API_METODOS_PAGO = 'http://localhost:8181/metodo_pago/getAll';
+  // Ahora URL base se obtiene dinámicamente desde environment.API_URL
+  private readonly API_PARAMETROS = environment.API_URL + '/parametro/getAll';
+  private readonly API_VENTA = environment.API_URL + '/venta/saveVenta';
+  private readonly API_CLIENTE = environment.API_URL + '/cliente/saveCliente';
+  private readonly API_METODOS_PAGO = environment.API_URL + '/metodo_pago/getAll';
+
 
   constructor(
     private http: HttpClient,
@@ -62,6 +76,7 @@ export class CarritoComponent implements OnInit {
     private fb: FormBuilder,
     private notify: NotificationService
   ) {}
+
 
   ngOnInit(): void {
     this.loadMetodosPago();
@@ -88,13 +103,19 @@ export class CarritoComponent implements OnInit {
     }
   }
 
+
   private loadMetodosPago() {
     this.http.get<MetodoPago[]>(this.API_METODOS_PAGO).subscribe({
       next: (data) => {
         this.metodosPago = data.filter(m => m.estado === 1);
+      },
+      error: (err) => {
+        console.error('Error al cargar métodos de pago', err);
+        this.notify.error('No pudimos cargar los métodos de pago.');
       }
     });
   }
+
 
   private getCartKey(): string {
     const rawUser = localStorage.getItem('auth_user');
@@ -107,16 +128,19 @@ export class CarritoComponent implements OnInit {
     }
   }
 
+
   private loadCartItems() {
     const key = this.getCartKey();
     const raw = localStorage.getItem(key);
     this.cartItems = raw ? JSON.parse(raw) : [];
   }
 
+
   private saveCart() {
     const key = this.getCartKey();
     localStorage.setItem(key, JSON.stringify(this.cartItems));
   }
+
 
   private loadParametros() {
     this.http.get<any[]>(this.API_PARAMETROS).subscribe({
@@ -137,6 +161,7 @@ export class CarritoComponent implements OnInit {
     });
   }
 
+
   private calculateTotals() {
     const iva = this.ivaPercent || 0;
     const dscto = this.discountPercent || 0;
@@ -155,11 +180,13 @@ export class CarritoComponent implements OnInit {
     this.totalFinal = this.subtotal + this.totalIva - this.discountAmount;
   }
 
+
   removeItem(index: number) {
     this.cartItems.splice(index, 1);
     this.saveCart();
     this.calculateTotals();
   }
+
 
   incrementItem(index: number) {
     const item = this.cartItems[index];
@@ -178,6 +205,7 @@ export class CarritoComponent implements OnInit {
     }
   }
 
+
   decrementItem(index: number) {
     const item = this.cartItems[index];
     if (item.quantity > 1) {
@@ -187,9 +215,11 @@ export class CarritoComponent implements OnInit {
     }
   }
 
+
   goBack() {
     this.router.navigate(['/usuario/vinilos']);
   }
+
 
   openShipping() {
     if (!this.cartItems.length) {
@@ -199,6 +229,7 @@ export class CarritoComponent implements OnInit {
     this.showShipping = true;
     this.calculateTotals();
   }
+
 
   closeShippingModal() {
     this.showShipping = false;
@@ -210,6 +241,7 @@ export class CarritoComponent implements OnInit {
       metodoPago: null
     });
   }
+
 
   submitShipping() {
     if (this.shippingForm.invalid) {
@@ -231,12 +263,12 @@ export class CarritoComponent implements OnInit {
     };
 
     // Buscar si el cliente ya existe por correo
-    this.http.get<any>(`http://localhost:8181/cliente/findByCorreo/${encodeURIComponent(correoBuscado)}`, {
+    this.http.get<any>(`${environment.API_URL}/cliente/findByCorreo/${encodeURIComponent(correoBuscado)}`, {
       headers: { Authorization: `Bearer ${token}` }
     }).subscribe({
       next: (clienteExistente) => {
         payloadCliente.id = clienteExistente.id;
-        this.http.post<{ id: number }>('http://localhost:8181/cliente/saveCliente', payloadCliente, {
+        this.http.post<{ id: number }>(`${environment.API_URL}/cliente/saveCliente`, payloadCliente, {
           headers: { Authorization: `Bearer ${token}` }
         }).subscribe({
           next: (clienteGuardado) => this.crearVentaConCliente(clienteGuardado.id),
@@ -246,7 +278,7 @@ export class CarritoComponent implements OnInit {
       error: err => {
         if (err.status === 404) {
           // No existe: CREA el cliente
-          this.http.post<{ id: number }>('http://localhost:8181/cliente/saveCliente', payloadCliente, {
+          this.http.post<{ id: number }>(`${environment.API_URL}/cliente/saveCliente`, payloadCliente, {
             headers: { Authorization: `Bearer ${token}` }
           }).subscribe({
             next: (clienteGuardado) => this.crearVentaConCliente(clienteGuardado.id),
@@ -259,6 +291,7 @@ export class CarritoComponent implements OnInit {
     });
   }
 
+
   private crearVentaConCliente(clienteId: number) {
     if (!clienteId) {
       this.notify.error('Error al crear/actualizar el cliente.');
@@ -267,7 +300,7 @@ export class CarritoComponent implements OnInit {
     }
     const idMetodoPago = this.shippingForm.value.metodoPago;
 
-    // **GUARDAR el método de pago seleccionado en localStorage**
+    // Guardar el método de pago seleccionado en localStorage
     localStorage.setItem('metodoPagoId', String(idMetodoPago));
 
     const payload = {
@@ -289,7 +322,7 @@ export class CarritoComponent implements OnInit {
     };
 
     const token = localStorage.getItem('auth_token') || '';
-    this.http.post('http://localhost:8181/venta/saveVenta', payload, {
+    this.http.post(`${environment.API_URL}/venta/saveVenta`, payload, {
       headers: { Authorization: `Bearer ${token}` }
     }).subscribe({
       next: (res: any) => {
@@ -314,6 +347,7 @@ export class CarritoComponent implements OnInit {
       }
     });
   }
+
 
   private handleErrorCliente(err: any) {
     console.error('Error al crear/actualizar cliente:', err);

@@ -7,6 +7,7 @@ import {
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Router, RouterModule } from '@angular/router';
 import { NotificationService } from '../../shared/notification.service';
+import { environment } from '../../../environments/environment';  // Importar environment
 
 interface Producto {
   id: number;
@@ -15,7 +16,11 @@ interface Producto {
   precioVentaActual: number;
   tieneIva: number;
 }
-interface CartItem { product: Producto; quantity: number; }
+
+interface CartItem {
+  product: Producto;
+  quantity: number;
+}
 
 @Component({
   selector: 'app-tarjeta',
@@ -35,7 +40,8 @@ export class TarjetaComponent implements OnInit {
   cartItems: CartItem[] = [];
   isLoading = false;
 
-  private readonly BASE_API  = 'http://localhost:8181';
+  // Usar la URL base dinámica según ambiente
+  private readonly BASE_API = environment.API_URL;
 
   constructor(
     private fb: FormBuilder,
@@ -55,9 +61,9 @@ export class TarjetaComponent implements OnInit {
           this.noAllSameDigits()
         ]
       ],
-      franquicia:     ['', [Validators.required]],
-      expiracion:     ['', [Validators.required, Validators.pattern(/^(0[1-9]|1[0-2])\/\d{2}$/)]],
-      cvv:            ['', [Validators.required, Validators.pattern(/^\d{3}$/)]]
+      franquicia:    ['', [Validators.required]],
+      expiracion:    ['', [Validators.required, Validators.pattern(/^(0[1-9]|1[0-2])\/\d{2}$/)]],
+      cvv:           ['', [Validators.required, Validators.pattern(/^\d{3}$/)]]
     });
     this.loadCartItems();
   }
@@ -106,10 +112,6 @@ export class TarjetaComponent implements OnInit {
     };
   }
 
-  /**
-   * Busca la transacción por venta.
-   * Si no existe, retorna null.
-   */
   private async getTransaccionByVenta(ventaId: number): Promise<any | null> {
     const token = localStorage.getItem('auth_token');
     const headers = { Authorization: `Bearer ${token}` };
@@ -120,7 +122,6 @@ export class TarjetaComponent implements OnInit {
     }
   }
 
-  /** Solo muestra/usa el método de pago guardado, no lo actualiza */
   async payViaTarjeta() {
     if (this.tarjetaForm.invalid) {
       this.tarjetaForm.markAllAsTouched();
@@ -132,7 +133,6 @@ export class TarjetaComponent implements OnInit {
       return;
     }
 
-    // Usa el id de método de pago guardado
     const idMetodoPago = Number(localStorage.getItem('metodoPagoId'));
     if (!idMetodoPago) {
       this.notify.error('No se encontró el método de pago seleccionado. Intenta de nuevo.');
@@ -148,7 +148,6 @@ export class TarjetaComponent implements OnInit {
 
     this.setLoadingState(true);
 
-    // Buscar transacción existente para esa venta
     const transaccion: any = await this.getTransaccionByVenta(Number(ventaId));
     if (!transaccion || !transaccion.id) {
       this.notify.error('No se encontró la transacción asociada a la venta.');
@@ -156,11 +155,10 @@ export class TarjetaComponent implements OnInit {
       return;
     }
 
-    // Prepara el payload solo mostrando el método de pago guardado
     const payload = {
-      id: transaccion.id,                     // clave para actualizar
+      id: transaccion.id,
       idCompra: transaccion.idCompra,
-      idMetodoPago,                           // DINÁMICO y ya ajustado en shipping
+      idMetodoPago,
       idBanco: 'NA',
       idFranquicia: this.tarjetaForm.value.franquicia,
       numTarjeta: this.tarjetaForm.value.numeroTarjeta.replace(/-/g, ''),
@@ -170,7 +168,6 @@ export class TarjetaComponent implements OnInit {
       fechaHora: new Date().toISOString()
     };
 
-    // Actualiza la transacción (no crea nueva)
     this.http.post(`${this.BASE_API}/transaccion/saveTransaccion`, payload, { headers })
       .subscribe({
         next: () => {
